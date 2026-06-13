@@ -54,8 +54,9 @@
   fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) handleFile(fileInput.files[0]); });
 
   function handleFile(file) {
-    if (!file.type.startsWith('image/')) { alert('请选择图片文件'); return; }
-    if (file.size > 20 * 1024 * 1024) { alert('图片不能超过 20MB'); return; }
+    const validExt = /\.(jpe?g|png|webp|bmp|gif|tiff?|svg|heic|heif)$/i.test(file.name);
+    if (!file.type.startsWith('image/') && !validExt) { alert('请选择图片文件，支持 JPG、PNG、WebP、BMP、GIF、TIFF、HEIC 等'); return; }
+    if (file.size > 50 * 1024 * 1024) { alert('图片不能超过 50MB'); return; }
     selectedFile = file;
     const reader = new FileReader();
     reader.onload = (e) => {

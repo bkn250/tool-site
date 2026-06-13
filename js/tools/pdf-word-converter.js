@@ -44,7 +44,7 @@
 
   async function loadPdf(file) {
     if(!file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf')) { alert('请选择 PDF 文件'); return; }
-    if(file.size > 50*1024*1024) { alert('文件不能超过 50MB'); return; }
+    if(file.size > 100*1024*1024) { alert('文件不能超过 100MB'); return; }
     pdfDocFileName = file.name; pdfFileName.textContent = file.name;
     pdfFileInfo.textContent = '大小: ' + formatFileSize(file.size);
     toolStatus.textContent = '📄 解析中...';
@@ -187,7 +187,7 @@
     if(!file.name.toLowerCase().endsWith('.docx') && file.type!=='application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       alert('请选择 .docx 文件'); return;
     }
-    if(file.size > 20*1024*1024) { alert('文件不能超过 20MB'); return; }
+    if(file.size > 50*1024*1024) { alert('文件不能超过 50MB'); return; }
     wordDocName = file.name;
     wordFileName.textContent = file.name;
     wordFileInfo.textContent = '大小: ' + formatFileSize(file.size);

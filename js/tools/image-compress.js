@@ -47,13 +47,14 @@
 
   // ========== 处理文件 ==========
   function handleFile(file) {
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-      alert('请选择 JPG、PNG 或 WebP 格式的图片');
+    const validTypes = ['image/jpeg','image/png','image/webp','image/bmp','image/gif','image/tiff','image/svg+xml','image/heic','image/heif'];
+    const validExt = /\.(jpe?g|png|webp|bmp|gif|tiff?|svg|heic|heif)$/i.test(file.name);
+    if (!file.type.startsWith('image/') && !validExt) {
+      alert('请选择图片文件，支持 JPG、PNG、WebP、BMP、GIF、TIFF、SVG、HEIC 等格式');
       return;
     }
-    if (file.size > 20 * 1024 * 1024) {
-      alert('图片大小不能超过 20MB');
+    if (file.size > 50 * 1024 * 1024) {
+      alert('图片大小不能超过 50MB');
       return;
     }
 
