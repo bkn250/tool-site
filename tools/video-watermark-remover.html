@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>视频去水印 - 免费在线去水印工具</title>
+  <meta name="description" content="免费在线视频去水印工具，上传视频框选水印区域，一键模糊处理，浏览器本地处理保护隐私。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/video-watermark-remover.html">
+  <meta property="og:title" content="视频去水印 - 免费在线去水印工具">
+  <meta property="og:url" content="https://pwwdb.com/tools/video-watermark-remover.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"视频去水印","url":"https://pwwdb.com/tools/video-watermark-remover.html","description":"免费在线视频去水印工具","applicationCategory":"Multimedia","operatingSystem":"All"}</script>
+  <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+  <style>
+    .video-container { position: relative; display: inline-block; max-width: 100%; margin: 0 auto; }
+    .video-container video { max-width: 100%; max-height: 500px; border-radius: var(--radius-sm); display: block; }
+    .watermark-overlay { position: absolute; border: 2px dashed #ef4444; background: rgba(239,68,68,0.15); cursor: move; z-index: 10; display: none; }
+    .watermark-overlay .handle { position: absolute; width: 12px; height: 12px; background: #ef4444; border-radius: 50%; }
+    .watermark-overlay .handle.tl { top: -6px; left: -6px; cursor: nw-resize; }
+    .watermark-overlay .handle.tr { top: -6px; right: -6px; cursor: ne-resize; }
+    .watermark-overlay .handle.bl { bottom: -6px; left: -6px; cursor: sw-resize; }
+    .watermark-overlay .handle.br { bottom: -6px; right: -6px; cursor: se-resize; }
+    .watermark-overlay .label { position: absolute; top: -28px; left: 0; background: #ef4444; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+    .selection-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #fff; background: rgba(0,0,0,0.6); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; pointer-events: none; z-index: 5; }
+    .v-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+    .v-controls button { padding: 8px 16px; }
+    .export-progress { width: 100%; height: 6px; background: var(--border); border-radius: 3px; margin: 12px 0; overflow: hidden; display: none; }
+    .export-progress-bar { height: 100%; background: var(--primary); border-radius: 3px; width: 0%; transition: width 0.3s; }
+    .method-select { display: flex; gap: 16px; margin: 12px 0; }
+    .method-select label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar"><div class="navbar-inner"><a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a><div class="navbar-actions"><button class="theme-toggle" id="themeToggle">🌙</button></div></div></nav>
+  <div class="tool-page">
+    <div class="tool-header"><a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a><h1>✂️ 视频去水印</h1><p>上传视频，框选水印区域，模糊/马赛克处理。所有处理在浏览器本地完成，不上传服务器。</p></div>
+    <div class="ad-container">📢 广告位招租</div>
+    <div class="tool-body">
+      <div class="file-upload-area" id="videoUpload"><div class="upload-icon">🎬</div><p>拖拽视频到这里，或 <strong>点击选择</strong></p><p style="font-size:0.8rem;margin-top:8px;">支持 MP4、WebM、MOV，最大 200MB</p><input type="file" id="videoFileInput" accept="video/*"></div>
+      <div id="videoPanel" style="display:none;">
+        <div class="form-group"><label>处理方法</label>
+          <div class="method-select">
+            <label><input type="radio" name="method" value="blur" checked> 模糊模糊</label>
+            <label><input type="radio" name="method" value="mosaic"> 马赛克</label>
+            <label><input type="radio" name="method" value="solid"> 纯色遮盖</label>
+          </div>
+        </div>
+        <div class="video-container" id="videoContainer">
+          <video id="videoPlayer" controls crossorigin="anonymous"></video>
+          <div class="watermark-overlay" id="watermarkOverlay">
+            <div class="label">🎯 水印区域（拖动调整）</div>
+            <div class="handle tl"></div><div class="handle tr"></div><div class="handle bl"></div><div class="handle br"></div>
+          </div>
+          <div class="selection-hint" id="selectionHint">点击视频画面开始绘制水印区域</div>
+        </div>
+        <div class="v-controls">
+          <button class="btn btn-primary" id="processBtn">✨ 开始处理</button>
+          <button class="btn btn-secondary" id="previewBtn">👁️ 预览效果</button>
+          <button class="btn btn-success" id="exportBtn" disabled>📥 导出视频</button>
+          <button class="btn btn-secondary" id="resetVideoBtn">🔄 重新选择</button>
+        </div>
+        <div class="export-progress" id="exportProgress"><div class="export-progress-bar" id="exportProgressBar"></div></div>
+        <div id="exportInfo" style="font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:8px;"></div>
+        <div class="alert alert-info" style="margin-top:16px;">
+          💡 导出速度取决于视频时长和你的电脑性能。长视频可能需要几分钟。<br>
+          📌 对于抖音/快手等平台视频，建议先下载到本地再上传处理。
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com</p></div></footer>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/video-watermark-remover.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>
