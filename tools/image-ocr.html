@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片转文字 - 免费在线OCR文字识别</title>
+  <meta name="description" content="免费在线OCR文字识别工具，支持图片和PDF中的文字提取，浏览器端处理保护隐私。">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a>
+      <div class="navbar-actions">
+        <span class="tool-count" id="ocrStatus">📷 待识别</span>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>🖼️ 图片转文字 (OCR)</h1>
+      <p>上传图片自动识别其中的文字内容，支持中文和英文。所有处理在浏览器本地完成。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <!-- 上传区域 -->
+      <div class="file-upload-area" id="ocrUpload">
+        <div class="upload-icon">📄</div>
+        <p>拖拽图片到这里，或 <strong>点击选择</strong></p>
+        <p style="font-size:0.8rem;margin-top:8px;">支持 JPG、PNG、WebP，建议清晰度越高识别率越好</p>
+        <input type="file" id="ocrFileInput" accept="image/*">
+      </div>
+
+      <!-- 预览和识别区域 -->
+      <div id="ocrPanel" style="display:none;">
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin:20px 0;">
+          <div style="flex:1;min-width:200px;">
+            <img id="ocrPreview" style="max-width:100%;max-height:300px;border-radius:var(--radius-sm);border:1px solid var(--border);">
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <div class="form-group">
+              <label>识别语言</label>
+              <select id="ocrLang">
+                <option value="chi_sim+eng">中文简体 + 英文</option>
+                <option value="chi_sim">中文简体</option>
+                <option value="eng">英文</option>
+                <option value="jpn">日文</option>
+                <option value="kor">韩文</option>
+              </select>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary" id="recognizeBtn">🔍 开始识别</button>
+              <button class="btn btn-secondary" id="ocrResetBtn">🔄 重新选择</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 进度 -->
+        <div id="ocrProgress" style="display:none;margin:16px 0;">
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px;">
+            <span id="ocrProgressText">正在加载识别引擎...</span>
+            <span id="ocrProgressPercent">0%</span>
+          </div>
+          <div class="strength-meter" style="margin:0;">
+            <div class="strength-meter-bar" id="ocrProgressBar" style="width:0%;background:var(--primary);"></div>
+          </div>
+        </div>
+
+        <!-- 识别结果 -->
+        <div class="form-group">
+          <label>识别结果</label>
+          <textarea id="ocrResult" rows="8" placeholder="点击"开始识别"提取文字..." style="min-height:150px;font-family:inherit;" readonly></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-success" id="copyOcrBtn">📋 复制结果</button>
+          <button class="btn btn-secondary" id="downloadOcrBtn">📥 导出为 .txt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container"><p>© 2024 在线工具箱 · OCR 识别在本地浏览器完成，图片不上传服务器</p></div>
+  </footer>
+  <div class="copy-toast" id="copyToast">✅ 已复制到剪贴板</div>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/image-ocr.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>

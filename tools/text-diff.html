@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文本对比工具 - 在线比较文本差异</title>
+  <meta name="description" content="免费在线文本对比工具，快速比较两段文本的差异，高亮显示新增和删除内容。">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo">
+        <span class="logo-icon">🔧</span>
+        <span>在线工具箱</span>
+      </a>
+      <div class="navbar-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>📝 文本对比工具</h1>
+      <p>粘贴两段文本，快速对比差异，高亮显示新增（绿色）和删除（红色）内容。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <div class="btn-group" style="margin-bottom:16px;">
+        <button class="btn btn-primary" id="diffBtn">🔍 对比差异</button>
+        <button class="btn btn-secondary" id="swapBtn">🔄 交换输入</button>
+        <button class="btn btn-secondary" id="clearDiffBtn">🗑️ 清空</button>
+      </div>
+
+      <div class="split-panel">
+        <div class="form-group">
+          <label>原始文本 (A)</label>
+          <textarea id="textA" rows="12" placeholder="粘贴原始文本...">今天是星期天
+天气很好
+我们去公园玩</textarea>
+        </div>
+        <div class="form-group">
+          <label>修改后文本 (B)</label>
+          <textarea id="textB" rows="12" placeholder="粘贴修改后的文本...">今天是星期一
+天气非常好
+我们去爬山
+还带了午餐</textarea>
+        </div>
+      </div>
+
+      <!-- 对比结果 -->
+      <div class="form-group">
+        <label>对比结果</label>
+        <div class="output-area" id="diffOutput" style="min-height:200px;white-space:pre-wrap;font-family:monospace;line-height:1.8;">
+          点击"对比差异"查看结果
+        </div>
+      </div>
+
+      <div id="diffStats" style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2024 在线工具箱 · 纯本地处理，数据不上传</p>
+    </div>
+  </footer>
+
+  <div class="copy-toast" id="copyToast">✅ 已复制</div>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/text-diff.js"></script>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "online-tools",
+  "version": "1.0.0",
+  "description": "免费在线工具箱 - 图片压缩、二维码生成、JSON格式化、文本对比、Markdown编辑器",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx live-server . --port=3000 --no-browser"
+  },
+  "keywords": ["online-tools", "image-compress", "qrcode", "markdown"],
+  "license": "MIT"
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON格式化工具 - 在线JSON校验与格式化</title>
+  <meta name="description" content="免费在线 JSON 格式化、校验、压缩工具，支持树形查看，快速定位 JSON 错误。">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo">
+        <span class="logo-icon">🔧</span>
+        <span>在线工具箱</span>
+      </a>
+      <div class="navbar-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>{ } JSON 格式化工具</h1>
+      <p>格式化、校验、压缩 JSON 数据，自动检测错误位置。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <!-- 操作按钮 -->
+      <div class="btn-group" style="margin-bottom:16px;">
+        <button class="btn btn-primary" id="formatBtn">✨ 格式化</button>
+        <button class="btn btn-secondary" id="compressBtn">📦 压缩</button>
+        <button class="btn btn-secondary" id="clearBtn">🗑️ 清空</button>
+        <button class="btn btn-secondary" id="copyBtn">📋 复制结果</button>
+      </div>
+
+      <!-- 输入区域 -->
+      <div class="form-group">
+        <label>输入 JSON</label>
+        <textarea id="jsonInput" rows="10" placeholder='粘贴你的 JSON 数据，例如：{"name":"张三","age":25}'></textarea>
+      </div>
+
+      <!-- 输出区域 -->
+      <div class="form-group">
+        <label>输出结果</label>
+        <div class="tool-body" style="padding:0;border:none;">
+          <div class="output-area" id="jsonOutput" style="min-height:200px;white-space:pre-wrap;font-family:monospace;">等待输入...</div>
+        </div>
+      </div>
+
+      <!-- 状态信息 -->
+      <div id="jsonStatus" style="margin-top:12px;font-size:0.85rem;color:var(--text-muted);">
+        行数: 0 | 字符数: 0
+      </div>
+
+      <!-- 错误信息 -->
+      <div id="jsonError" style="display:none;margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2024 在线工具箱 · 纯本地处理，数据不上传</p>
+    </div>
+  </footer>
+
+  <div class="copy-toast" id="copyToast">✅ 已复制</div>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/json-formatter.js"></script>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+</body>
+</html>

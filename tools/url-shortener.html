@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>短链接生成器 - 免费在线缩短网址</title>
+  <meta name="description" content="免费在线短链接生成器，将长网址变成短链接，方便分享和传播。">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a>
+      <div class="navbar-actions">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>🔗 短链接生成器</h1>
+      <p>将长网址变成短链接，方便在社交媒体、短信、印刷品中分享。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <div class="form-group">
+        <label>输入长链接</label>
+        <div style="display:flex;gap:10px;">
+          <input type="text" id="longUrl" placeholder="https://example.com/very/long/url/that/needs/shortening" style="flex:1;">
+          <button class="btn btn-primary" id="shortenBtn">🔗 生成短链</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="display:none;" id="resultGroup">
+        <label>生成的短链接</label>
+        <div style="display:flex;gap:10px;">
+          <input type="text" id="shortUrl" readonly style="flex:1;font-weight:600;color:var(--primary);">
+          <button class="btn btn-success" id="copyShortBtn">📋 复制</button>
+          <button class="btn btn-secondary" id="openShortBtn" target="_blank">↗️ 打开</button>
+        </div>
+        <div style="margin-top:8px;font-size:0.85rem;color:var(--text-muted);">
+          <span id="originalLength"></span>
+        </div>
+      </div>
+
+      <!-- 历史记录 -->
+      <div style="margin-top:24px;">
+        <label style="display:flex;justify-content:space-between;align-items:center;">
+          <span>历史记录</span>
+          <button class="btn btn-secondary" id="clearHistoryBtn" style="padding:4px 12px;font-size:0.8rem;">清空</button>
+        </label>
+        <div class="output-area" id="shortenHistory" style="min-height:60px;font-size:0.85rem;max-height:300px;overflow-y:auto;">
+          <div style="color:var(--text-muted);">暂无记录</div>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-top:16px;">
+        💡 短链接通过 <a href="https://is.gd" target="_blank" rel="noopener">is.gd</a> 服务生成，永久有效。
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container"><p>© 2024 在线工具箱</p></div>
+  </footer>
+  <div class="copy-toast" id="copyToast">✅ 已复制到剪贴板</div>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/url-shortener.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线Markdown编辑器 - 免费Markdown写作工具</title>
+  <meta name="description" content="免费在线 Markdown 编辑器，实时预览渲染效果，支持导出 HTML，适合写作和技术文档编写。">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .md-editor {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      min-height: 500px;
+    }
+    .md-editor textarea {
+      min-height: 500px;
+      resize: vertical;
+      font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+      line-height: 1.7;
+      font-size: 0.88rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .md-editor textarea:focus {
+      border-color: var(--primary);
+    }
+    .md-preview {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 24px;
+      overflow-y: auto;
+      min-height: 500px;
+      background: var(--bg-card);
+      line-height: 1.8;
+    }
+    .md-preview h1, .md-preview h2, .md-preview h3 { margin-top: 1.2em; margin-bottom: 0.5em; font-weight: 600; }
+    .md-preview h1 { font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
+    .md-preview h2 { font-size: 1.4rem; border-bottom: 1px solid var(--border); padding-bottom: 0.2em; }
+    .md-preview h3 { font-size: 1.15rem; }
+    .md-preview p { margin-bottom: 0.8em; }
+    .md-preview code {
+      background: var(--bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+    .md-preview pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .md-preview pre code { background: none; padding: 0; }
+    .md-preview blockquote {
+      border-left: 4px solid var(--primary);
+      padding-left: 16px;
+      color: var(--text-secondary);
+      margin: 1em 0;
+    }
+    .md-preview table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+    }
+    .md-preview th, .md-preview td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .md-preview th { background: var(--bg); font-weight: 600; }
+    .md-preview img { max-width: 100%; border-radius: 4px; }
+    .md-preview ul, .md-preview ol { padding-left: 2em; margin-bottom: 0.8em; }
+    .md-preview a { color: var(--primary); }
+    @media (max-width: 768px) {
+      .md-editor { grid-template-columns: 1fr; }
+      .md-editor textarea { min-height: 300px; }
+      .md-preview { min-height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo">
+        <span class="logo-icon">🔧</span>
+        <span>在线工具箱</span>
+      </a>
+      <div class="navbar-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page" style="max-width: 1100px;">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>📄 Markdown 在线编辑器</h1>
+      <p>左侧编写 Markdown，右侧实时预览渲染效果。支持导出 HTML。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <div class="btn-group" style="margin-bottom:16px;">
+        <button class="btn btn-success" id="exportHtmlBtn">📤 导出 HTML</button>
+        <button class="btn btn-primary" id="downloadMdBtn">📥 下载 .md 文件</button>
+        <button class="btn btn-secondary" id="clearMdBtn">🗑️ 清空</button>
+      </div>
+
+      <div class="md-editor">
+        <textarea id="mdInput" placeholder="在此输入 Markdown 内容..."># 欢迎使用 Markdown 编辑器
+
+## 常用语法示例
+
+**粗体文字** 和 *斜体文字*
+
+### 列表
+- 项目一
+- 项目二
+- 项目三
+
+### 代码
+`行内代码`
+
+\`\`\`javascript
+console.log('代码块');
+\`\`\`
+
+### 引用
+> 这是一段引用文字
+
+### 链接
+[访问示例网站](https://example.com)
+
+---
+
+开始你的 Markdown 写作吧！
+        </textarea>
+        <div class="md-preview" id="mdPreview"></div>
+      </div>
+
+      <div style="margin-top:12px;font-size:0.85rem;color:var(--text-muted);">
+        字数: <span id="wordCount">0</span> | 行数: <span id="lineCount">0</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2024 在线工具箱 · 本地处理，无需网络</p>
+    </div>
+  </footer>
+
+  <div class="copy-toast" id="copyToast">✅ 已复制</div>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/markdown-editor.js"></script>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+</body>
+</html>

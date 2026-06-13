@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF转Word - 免费在线PDF转Word工具</title>
+  <meta name="description" content="免费在线PDF转Word工具，无需上传服务器，在浏览器本地将PDF文件转换为Word文档，保护你的隐私安全。">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a>
+      <div class="navbar-actions">
+        <span class="tool-count" id="pdfStatus">📄 待上传</span>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>📄 PDF 转 Word</h1>
+      <p>上传 PDF 文件，在浏览器中提取文字并生成可编辑的 Word 文档。文件不会上传到任何服务器。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <!-- 上传区域 -->
+      <div class="file-upload-area" id="pdfUpload">
+        <div class="upload-icon">📁</div>
+        <p>拖拽 PDF 文件到这里，或 <strong>点击选择</strong></p>
+        <p style="font-size:0.8rem;margin-top:8px;">支持 PDF 文件，最大 50MB</p>
+        <input type="file" id="pdfFileInput" accept=".pdf,application/pdf">
+      </div>
+
+      <!-- 处理面板 -->
+      <div id="pdfPanel" style="display:none;">
+        <!-- 文件信息 -->
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;padding:12px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div>
+            <strong id="pdfFileName">文件名</strong><br>
+            <span style="font-size:0.85rem;color:var(--text-muted);" id="pdfFileInfo">页数: - | 大小: -</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary" id="convertBtn">🔄 转换为 Word</button>
+            <button class="btn btn-secondary" id="pdfResetBtn">🔄 重新选择</button>
+          </div>
+        </div>
+
+        <!-- 进度 -->
+        <div id="pdfProgress" style="display:none;margin:16px 0;">
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px;">
+            <span id="pdfProgressText">正在解析...</span>
+            <span id="pdfProgressPercent">0%</span>
+          </div>
+          <div class="strength-meter" style="margin:0;">
+            <div class="strength-meter-bar" id="pdfProgressBar" style="width:0%;background:var(--primary);"></div>
+          </div>
+        </div>
+
+        <!-- 页面预览和文本编辑 -->
+        <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+          <label style="margin:0;">提取的文本内容（可编辑后导出）</label>
+          <span style="font-size:0.82rem;color:var(--text-muted);" id="totalChars">0 字符</span>
+        </div>
+        <textarea id="pdfTextResult" rows="16" placeholder="PDF 文本将显示在这里，你可以编辑后再导出..." style="min-height:300px;font-family:inherit;line-height:1.8;"></textarea>
+
+        <div class="btn-group" style="margin-top:16px;">
+          <button class="btn btn-success" id="downloadWordBtn">📥 下载 Word 文档</button>
+          <button class="btn btn-secondary" id="downloadTxtBtn">📥 下载为 .txt</button>
+          <button class="btn btn-secondary" id="copyPdfTextBtn">📋 复制全部</button>
+        </div>
+
+        <!-- 页面预览 -->
+        <div style="margin-top:20px;">
+          <label>页面预览</label>
+          <div id="pdfPagesPreview" style="display:flex;flex-direction:column;gap:12px;margin-top:8px;max-height:500px;overflow-y:auto;padding:8px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);">
+            <div style="color:var(--text-muted);text-align:center;padding:20px;">PDF 加载完成后显示页面预览</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:16px;">
+      ⚡ 所有处理在浏览器本地完成，PDF 文件不会上传到任何服务器，保护你的隐私安全。<br>
+      📌 文字型 PDF 效果最佳，扫描件 PDF 建议使用 OCR 工具先识别文字。
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container"><p>© 2024 在线工具箱 · PDF 转 Word 全程在本地完成</p></div>
+  </footer>
+  <div class="copy-toast" id="copyToast">✅ 已复制到剪贴板</div>
+
+  <!-- 加载 PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  </script>
+  <!-- 加载 docx 库 -->
+  <script src="https://cdn.jsdelivr.net/npm/docx@8/build/index.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/pdf-to-word.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>
