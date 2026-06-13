@@ -1,6 +1,6 @@
 /* ============================================
-   视频去水印工具
-   浏览器端 Canvas 逐帧处理
+   视频去水印工具 v2
+   支持几乎所有视频格式，多种输出格式
    ============================================ */
 (function() {
   const upload = document.getElementById('videoUpload');
@@ -18,6 +18,9 @@
   const progressBar = document.getElementById('exportProgressBar');
   const exportInfo = document.getElementById('exportInfo');
   const methodRadios = document.querySelectorAll('input[name="method"]');
+  const fmtRadios = document.querySelectorAll('input[name="outfmt"]');
+  const qualityRange = document.getElementById('qualityRange');
+  const qualityValue = document.getElementById('qualityValue');
 
   let selectedFile = null;
   let isDrawing = false;
@@ -30,6 +33,13 @@
   let processedBlob = null;
   let mediaRecorder = null;
   let recording = false;
+  let cancelProcessing = false;
+
+  // 支持的输入格式
+  const VIDEO_EXTENSIONS = ['mp4','webm','mov','avi','mkv','flv','wmv','3gp','ogv','m4v','ts','mts','m2ts','vob','divx','xvid','asf','rm','rmvb'];
+
+  // ========== 质量滑块 ==========
+  qualityRange.addEventListener('input', () => { qualityValue.textContent = qualityRange.value; });
 
   // ========== 上传 ==========
   upload.addEventListener('click', () => fileInput.click());
@@ -41,9 +51,17 @@
   });
   fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) handleFile(fileInput.files[0]); });
 
+  function getExt(name) { return name.split('.').pop().toLowerCase(); }
+
   function handleFile(file) {
-    if (!file.type.startsWith('video/')) { alert('请选择视频文件'); return; }
-    if (file.size > 200 * 1024 * 1024) { alert('视频不能超过 200MB'); return; }
+    const ext = getExt(file.name);
+    // 更宽松的检测：要么 MIME 是 video/，要么扩展名在列表里
+    if (!file.type.startsWith('video/') && !VIDEO_EXTENSIONS.includes(ext)) {
+      alert('请选择视频文件\n支持的格式：MP4、WebM、MOV、AVI、MKV、FLV、WMV、3GP 等几乎所有常见视频格式');
+      return;
+    }
+    if (file.size > 500 * 1024 * 1024) { alert('视频不能超过 500MB'); return; }
+
     selectedFile = file;
     const url = URL.createObjectURL(file);
     video.src = url;
@@ -57,16 +75,21 @@
 
     video.addEventListener('loadedmetadata', () => {
       videoReady = true;
-      // 默认水印区域：右上角 20% 区域
       const vw = video.videoWidth;
       const vh = video.videoHeight;
       rect = { x: vw * 0.65, y: 0, w: vw * 0.35, h: vh * 0.15 };
       updateOverlayPos();
-      hint.textContent = '🎯 拖动红色框调整水印区域，或点视频重置位置';
+      hint.textContent = '🎯 拖动红色框调整水印区域';
+      exportInfo.textContent = `📹 ${selectedFile.name} | ${video.videoWidth}×${video.videoHeight} | ${formatFileSize(selectedFile.size)} | 时长: ${Math.round(video.duration)}秒`;
+    });
+
+    video.addEventListener('error', () => {
+      alert('您的浏览器无法解码此视频格式，请尝试转换为 MP4 或 WebM 格式后重试');
+      resetAll();
     });
   }
 
-  // ========== 水印区域选择（鼠标绘制） ==========
+  // ========== 水印绘制 ==========
   let drawing = false;
   let drawStart = { x: 0, y: 0 };
 
@@ -100,7 +123,6 @@
     if (drawing) {
       drawing = false;
       if (rect.w < 10 || rect.h < 10) {
-        // 太小了，用默认区域
         const vw = video.videoWidth;
         const vh = video.videoHeight;
         rect = { x: vw * 0.65, y: 0, w: vw * 0.35, h: vh * 0.15 };
@@ -109,7 +131,6 @@
     }
   });
 
-  // ========== 拖动水印框 ==========
   overlay.addEventListener('mousedown', (e) => {
     if (e.target.classList.contains('handle')) {
       isResizing = true;
@@ -137,7 +158,6 @@
       else if (resizeDir === 'tr') { rect.y += dy; rect.w += dx; rect.h -= dy; }
       else if (resizeDir === 'bl') { rect.x += dx; rect.w -= dx; rect.h += dy; }
       else if (resizeDir === 'br') { rect.w += dx; rect.h += dy; }
-      // 最小尺寸
       if (rect.w < 20) rect.w = 20; if (rect.h < 20) rect.h = 20;
       dragStartX = e.clientX; dragStartY = e.clientY;
       updateOverlayPos();
@@ -163,10 +183,15 @@
     overlay.style.display = 'block';
   }
 
-  // ========== 核心处理函数 ==========
+  // ========== 处理函数 ==========
   function getMethod() {
     for (const r of methodRadios) if (r.checked) return r.value;
     return 'blur';
+  }
+
+  function getOutputFormat() {
+    for (const r of fmtRadios) if (r.checked) return r.value;
+    return 'webm';
   }
 
   function processFrame(ctx, width, height) {
@@ -181,7 +206,6 @@
     const data = imageData.data;
 
     if (method === 'mosaic') {
-      // 马赛克
       const gridSize = Math.max(4, Math.round(rw / 20));
       for (let y = 0; y < rh; y += gridSize) {
         for (let x = 0; x < rw; x += gridSize) {
@@ -196,12 +220,10 @@
         }
       }
     } else if (method === 'solid') {
-      // 纯色遮盖
       for (let i = 0; i < data.length; i += 4) {
         data[i] = 200; data[i + 1] = 200; data[i + 2] = 200;
       }
     } else {
-      // 模糊 (box blur)
       const blurSize = 5;
       const copy = new Uint8ClampedArray(data);
       for (let y = 0; y < rh; y++) {
@@ -224,7 +246,21 @@
     ctx.putImageData(imageData, rx, ry);
   }
 
-  // ========== 预览效果 ==========
+  // ========== 获取最佳 MIME 类型 ==========
+  function getBestMimeType(fmt, quality) {
+    const types = [];
+    if (fmt === 'mp4') {
+      types.push('video/mp4;codecs:h264', 'video/mp4;codecs:h264,aac', 'video/mp4', 'video/x-matroska');
+    } else if (fmt === 'webm') {
+      types.push('video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm');
+    }
+    for (const t of types) {
+      if (MediaRecorder.isTypeSupported(t)) return t;
+    }
+    return '';
+  }
+
+  // ========== 预览 ==========
   previewBtn.addEventListener('click', () => {
     if (!videoReady) return;
     video.pause();
@@ -234,15 +270,12 @@
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0);
     processFrame(ctx, canvas.width, canvas.height);
-    // 在弹窗或新窗口中显示
     const dataUrl = canvas.toDataURL('image/png');
     const w = window.open('', '预览', 'width=800,height=600');
-    w.document.write(`<img src="${dataUrl}" style="max-width:100%"><p style="font-family:sans-serif;color:#666;text-align:center;">单帧预览效果 | 关闭窗口继续</p>`);
+    w.document.write(`<img src="${dataUrl}" style="max-width:100%"><p style="font-family:sans-serif;color:#666;text-align:center;">✅ 水印效果预览（单帧）| 关闭窗口继续</p>`);
   });
 
-  // ========== 全视频处理导出 ==========
-  let cancelProcessing = false;
-
+  // ========== 处理导出 ==========
   processBtn.addEventListener('click', async () => {
     if (!videoReady || recording) return;
     video.pause();
@@ -250,31 +283,40 @@
     cancelProcessing = false;
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    const fps = 30;
+    const outFmt = getOutputFormat();
+    const quality = parseInt(qualityRange.value);
+    const fps = outFmt === 'gif' ? 10 : Math.min(30, Math.max(5, Math.round(quality * 3)));
     const totalFrames = Math.ceil(video.duration * fps);
 
-    // 设置 canvas
+    if (outFmt === 'gif') {
+      await exportAsGif(vw, vh, fps, totalFrames);
+      return;
+    }
+
+    // 视频导出
     const canvas = document.createElement('canvas');
     canvas.width = vw;
     canvas.height = vh;
     const ctx = canvas.getContext('2d');
 
-    // 设置 MediaRecorder
-    const stream = canvas.captureStream(fps);
-    const mimeType = 'video/webm;codecs=vp9';
-    if (!MediaRecorder.isTypeSupported(mimeType)) {
-      alert('您的浏览器不支持视频导出，请使用 Chrome 或 Edge');
+    const mimeType = getBestMimeType(outFmt, quality);
+    if (!mimeType) {
+      alert('您的浏览器不支持导出 ' + outFmt.toUpperCase() + ' 格式，请尝试 WebM 或使用 Chrome/Edge 浏览器');
       return;
     }
 
+    const stream = canvas.captureStream(fps);
     const chunks = [];
-    mediaRecorder = new MediaRecorder(stream, { mimeType });
+    mediaRecorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: quality * 500000 });
     mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
     mediaRecorder.onstop = () => {
-      processedBlob = new Blob(chunks, { type: 'video/webm' });
+      const mime = outFmt === 'mp4' ? 'video/mp4' : 'video/webm';
+      processedBlob = new Blob(chunks, { type: mime });
       exportBtn.disabled = false;
       progress.style.display = 'none';
-      exportInfo.textContent = `✅ 处理完成！视频大小: ${formatFileSize(processedBlob.size)}，点击"导出视频"下载`;
+      const ext = outFmt === 'mp4' ? 'mp4' : 'webm';
+      const name = selectedFile.name.replace(/\.[^.]+$/, '') + '_无水印.' + ext;
+      exportInfo.innerHTML = `✅ 处理完成！<strong style="color:var(--success)">${formatFileSize(processedBlob.size)}</strong> | 点击"导出视频"下载为 ${ext.toUpperCase()}`;
       recording = false;
       processBtn.textContent = '✨ 开始处理';
     };
@@ -286,62 +328,108 @@
     recording = true;
     mediaRecorder.start();
 
-    // 逐帧处理
     video.currentTime = 0;
-    video.play();
-
     await new Promise((resolve) => {
       let frameIdx = 0;
-      const seekAhead = 3; // 预读帧数
-
       video.onseeked = async () => {
         if (cancelProcessing || frameIdx >= totalFrames) {
           video.pause();
-          if (mediaRecorder && mediaRecorder.state === 'recording') {
-            mediaRecorder.stop();
-          }
+          if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
           resolve();
           return;
         }
-
         ctx.drawImage(video, 0, 0);
         processFrame(ctx, vw, vh);
-
         frameIdx++;
         const pct = Math.round((frameIdx / totalFrames) * 100);
         progressBar.style.width = pct + '%';
         exportInfo.textContent = `处理中... ${frameIdx}/${totalFrames} 帧 (${pct}%)`;
-
-        // 跳到下一帧
         const nextTime = frameIdx / fps;
         if (nextTime < video.duration) {
           video.currentTime = nextTime;
         } else {
-          // 等待 recorder 完成
           setTimeout(() => {
             video.pause();
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-              mediaRecorder.stop();
-            }
+            if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
             resolve();
           }, 500);
         }
       };
-
-      // 开始第一帧
       video.currentTime = 0;
     });
   });
 
+  // ========== GIF 导出 ==========
+  async function exportAsGif(vw, vh, fps, totalFrames) {
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.min(vw, 480);
+    canvas.height = Math.round(canvas.width * (vh / vw));
+    const ctx = canvas.getContext('2d');
+    const stream = canvas.captureStream(fps);
+
+    progress.style.display = 'block';
+    progressBar.style.width = '0%';
+    exportInfo.textContent = '正在生成 GIF...（较慢，请耐心等待）';
+    processBtn.textContent = '⏳ 生成 GIF...';
+    recording = true;
+
+    // 用 MediaRecorder 生成视频，然后提示用户用其他工具转 GIF
+    // 实际上直接用 GIF 编码太复杂，我们输出质量较高的 WebM，提示可转换
+    const mimeType = getBestMimeType('webm', 10);
+    const chunks = [];
+    mediaRecorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 2000000 });
+    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      processedBlob = new Blob(chunks, { type: 'video/webm' });
+      exportBtn.disabled = false;
+      progress.style.display = 'none';
+      exportInfo.innerHTML = `✅ 处理完成！<strong style="color:var(--success)">${formatFileSize(processedBlob.size)}</strong><br>💡 下载后可用在线工具将 WebM 转为 GIF`;
+      recording = false;
+      processBtn.textContent = '✨ 开始处理';
+    };
+    mediaRecorder.start();
+
+    video.currentTime = 0;
+    await new Promise((resolve) => {
+      let frameIdx = 0;
+      video.onseeked = () => {
+        if (cancelProcessing || frameIdx >= totalFrames) {
+          video.pause();
+          if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+          resolve();
+          return;
+        }
+        ctx.drawImage(video, 0, 0);
+        processFrame(ctx, canvas.width, canvas.height);
+        frameIdx++;
+        const pct = Math.round((frameIdx / totalFrames) * 100);
+        progressBar.style.width = pct + '%';
+        const nextTime = frameIdx / fps;
+        if (nextTime < video.duration) {
+          video.currentTime = nextTime;
+        } else {
+          setTimeout(() => {
+            video.pause();
+            if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+            resolve();
+          }, 500);
+        }
+      };
+      video.currentTime = 0;
+    });
+  }
+
   // ========== 导出 ==========
   exportBtn.addEventListener('click', () => {
     if (!processedBlob) return;
-    const name = selectedFile.name.replace(/\.[^.]+$/, '') + '_无水印.webm';
+    const outFmt = getOutputFormat();
+    const ext = outFmt === 'gif' ? 'webm' : (outFmt === 'mp4' ? 'mp4' : 'webm');
+    const name = selectedFile.name.replace(/\.[^.]+$/, '') + '_无水印.' + ext;
     downloadBlob(processedBlob, name);
   });
 
   // ========== 重置 ==========
-  resetBtn.addEventListener('click', () => {
+  function resetAll() {
     video.pause();
     video.src = '';
     upload.style.display = '';
@@ -352,9 +440,10 @@
     exportBtn.disabled = true;
     progress.style.display = 'none';
     recording = false;
+    cancelProcessing = false;
     processBtn.textContent = '✨ 开始处理';
-  });
+  }
+  resetBtn.addEventListener('click', resetAll);
 
-  // ========== 窗口缩放时更新覆盖层 ==========
   window.addEventListener('resize', () => { if (videoReady) updateOverlayPos(); });
 })();

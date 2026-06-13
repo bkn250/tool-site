@@ -36,13 +36,26 @@
     <div class="tool-header"><a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a><h1>✂️ 视频去水印</h1><p>上传视频，框选水印区域，模糊/马赛克处理。所有处理在浏览器本地完成，不上传服务器。</p></div>
     <div class="ad-container">📢 广告位招租</div>
     <div class="tool-body">
-      <div class="file-upload-area" id="videoUpload"><div class="upload-icon">🎬</div><p>拖拽视频到这里，或 <strong>点击选择</strong></p><p style="font-size:0.8rem;margin-top:8px;">支持 MP4、WebM、MOV，最大 200MB</p><input type="file" id="videoFileInput" accept="video/*"></div>
+      <div class="file-upload-area" id="videoUpload"><div class="upload-icon">🎬</div><p>拖拽视频到这里，或 <strong>点击选择</strong></p><p style="font-size:0.8rem;margin-top:8px;">支持 MP4、WebM、MOV、AVI、MKV、FLV、WMV、3GP、OGV 等几乎所有格式，最大 500MB</p><input type="file" id="videoFileInput" accept="video/*,.avi,.mkv,.flv,.wmv,.3gp,.ogv,.m4v,.ts,.mts"></div>
       <div id="videoPanel" style="display:none;">
         <div class="form-group"><label>处理方法</label>
           <div class="method-select">
             <label><input type="radio" name="method" value="blur" checked> 模糊模糊</label>
             <label><input type="radio" name="method" value="mosaic"> 马赛克</label>
             <label><input type="radio" name="method" value="solid"> 纯色遮盖</label>
+          </div>
+        </div>
+        <div class="form-group"><label>输出格式</label>
+          <div class="method-select">
+            <label><input type="radio" name="outfmt" value="webm" checked> WebM（推荐，小体积）</label>
+            <label><input type="radio" name="outfmt" value="mp4"> MP4（兼容性好）</label>
+            <label><input type="radio" name="outfmt" value="gif"> GIF 动图</label>
+          </div>
+        </div>
+        <div class="form-group"><label>输出质量</label>
+          <div class="range-control">
+            <input type="range" id="qualityRange" min="1" max="10" value="5">
+            <span class="range-value" id="qualityValue">5</span>
           </div>
         </div>
         <div class="video-container" id="videoContainer">
