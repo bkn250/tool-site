@@ -1,134 +1,112 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>内蒙苦荞茶杯茶</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>内蒙苦荞茶杯茶·小红书三件套</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"PingFang SC","Microsoft YaHei",serif;background:#faf8f3;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
-.card{max-width:420px;width:100%;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
+body{font-family:"PingFang SC","Microsoft YaHei",serif;background:#f0ebe0;display:flex;flex-direction:column;align-items:center;gap:30px;padding:20px}
+.c{width:420px;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);background:#fff;position:relative}
 
-/* ===== 顶部大图 ===== */
-.hero{background:linear-gradient(160deg,#3d2b1f 0%,#5c3d2e 30%,#8b6914 70%,#d4a855 100%);padding:0;text-align:center;position:relative;height:260px;overflow:hidden}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(180deg,transparent,#fff)}
-.hero-bg{position:absolute;inset:0}
-.hero-bg .circle1{position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);top:-40px;right:-60px}
-.hero-bg .circle2{position:absolute;width:120px;height:120px;border-radius:50%;border:1px solid rgba(255,255,255,0.08);top:60px;right:20px}
-.hero-bg .circle3{position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);bottom:-80px;left:-100px}
-.hero-title{position:absolute;bottom:60px;left:0;right:0;z-index:2;padding:0 24px}
-.hero-title span{display:block;color:rgba(255,255,255,0.7);font-size:0.75rem;letter-spacing:4px;margin-bottom:4px}
-.hero-title h1{color:#fff;font-size:2rem;font-weight:700;letter-spacing:3px;text-shadow:0 2px 8px rgba(0,0,0,0.3)}
+/* ====== 第1张：封面 ====== */
+.c1 .top{background:linear-gradient(160deg,#3d2b1f 0%,#6b3a2a 40%,#a67c30 80%,#d4a855 100%);height:280px;position:relative;display:flex;align-items:center;justify-content:center}
+.c1 .top::before{content:'';position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(180deg,transparent,#fff)}
+.c1 .circle{position:absolute;width:160px;height:160px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);top:20px;left:-40px}
+.c1 .circle2{position:absolute;width:240px;height:240px;border-radius:50%;border:1px solid rgba(255,255,255,0.08);bottom:-80px;right:-60px}
+.c1 .tc{text-align:center;z-index:2;margin-bottom:40px}
+.c1 .tc .tag{display:inline-block;color:#ffd700;font-size:0.7rem;letter-spacing:4px;border:1px solid rgba(255,215,0,0.3);padding:3px 16px;border-radius:10px;margin-bottom:8px}
+.c1 .tc h1{color:#fff;font-size:2.5rem;font-weight:800;letter-spacing:4px;text-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.c1 .tc p{color:rgba(255,255,255,0.8);font-size:0.9rem;margin-top:4px;letter-spacing:1px}
+.c1 .bot{padding:24px;text-align:center}
+.c1 .bot .price{font-size:2.5rem;font-weight:900;color:#c0392b}
+.c1 .bot .price small{font-size:1rem;color:#999;font-weight:400}
+.c1 .bot .sub{font-size:0.8rem;color:#999;margin-top:4px}
 
-/* ===== 价格标签 ===== */
-.price-badge{position:absolute;top:20px;right:20px;z-index:3;background:#c0392b;color:#fff;border-radius:12px;padding:6px 14px;text-align:center;box-shadow:0 4px 12px rgba(192,57,43,0.3)}
-.price-badge .amount{font-size:1.3rem;font-weight:900;line-height:1.2}
-.price-badge .unit{font-size:0.7rem;opacity:0.8}
+/* ====== 第2张：卖点 ====== */
+.c2 .top2{background:linear-gradient(160deg,#faf6ee,#fdf9f2);padding:28px 24px 20px;text-align:center;border-bottom:1px solid #f0e8d8}
+.c2 .top2 .t2{font-size:1.1rem;font-weight:700;color:#3d2b1f;letter-spacing:2px}
+.c2 .top2 .t2::after{content:'';display:block;width:30px;height:3px;background:#d4a855;margin:6px auto 0}
+.c2 .g{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#f0e8d8}
+.c2 .gi{background:#fff;padding:18px 14px;text-align:center}
+.c2 .gi .ic{font-size:2rem;display:block;margin-bottom:6px}
+.c2 .gi b{display:block;font-size:0.9rem;color:#3d2b1f;margin-bottom:2px}
+.c2 .gi em{font-size:0.7rem;color:#999;font-style:normal}
+.c2 .compare{display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center;font-size:0.72rem;background:#fdfbf7}
+.c2 .compare .col{padding:10px 6px}
+.c2 .compare .col:nth-child(2){background:#fff5e6}
+.c2 .compare .col:nth-child(3){background:#e8f8f5}
+.c2 .compare .ch{font-weight:700;font-size:0.78rem;margin-bottom:4px}
 
-/* ===== 核心卖点（4宫格） ===== */
-.section{padding:20px 24px}
-.section-title{font-size:1rem;font-weight:700;color:#3d2b1f;text-align:center;margin-bottom:14px;letter-spacing:1px}
-.section-title::after{content:'';display:block;width:30px;height:3px;background:#d4a855;margin:6px auto 0;border-radius:2px}
-
-.grid-4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.grid-item{background:#faf8f3;border-radius:14px;padding:16px 12px;text-align:center}
-.grid-item .ico{font-size:1.8rem;display:block;margin-bottom:6px}
-.grid-item b{display:block;font-size:0.88rem;color:#3d2b1f;margin-bottom:2px}
-.grid-item span{font-size:0.7rem;color:#999}
-
-/* ===== 对比表 ===== */
-.compare{background:#fdfbf7;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center;font-size:0.78rem;border:1px solid #f0ebe0}
-.compare .col{padding:12px 8px}
-.compare .col:first-child{background:#faf6ee}
-.compare .col:nth-child(2){background:#fff5e6}
-.compare .col:last-child{background:#e8f8f5;border-left:2px solid #a3e4d7}
-.compare .col .h{font-weight:700;color:#3d2b1f;margin-bottom:6px;font-size:0.82rem}
-.compare .col div{margin:3px 0;color:#666;font-size:0.7rem}
-
-/* ===== 信任区 ===== */
-.trust{background:linear-gradient(135deg,#fef9f0,#fdf5e6);border-radius:14px;padding:14px;display:flex;justify-content:space-around;text-align:center}
-.trust-item{font-size:0.78rem;color:#8b6914}
-.trust-item b{display:block;font-size:0.9rem;color:#5c3d2e}
-
-/* ===== CTA 按钮 ===== */
-.cta-btn{display:block;margin:16px 24px;padding:14px;background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;text-align:center;border-radius:14px;font-size:1rem;font-weight:700;letter-spacing:2px;box-shadow:0 4px 16px rgba(192,57,43,0.25);text-decoration:none}
-.cta-sub{text-align:center;font-size:0.75rem;color:#999;margin:-8px 0 20px}
-
-/* ===== 底部 ===== */
-.footer{text-align:center;padding:0 24px 20px;font-size:0.7rem;color:#bbb}
-.footer span{color:#c0392b}
+/* ====== 第3张：行动 ====== */
+.c3 .top3{background:linear-gradient(160deg,#c0392b,#e74c3c);padding:40px 24px;text-align:center;color:#fff}
+.c3 .top3 .t3{font-size:1.3rem;font-weight:700;letter-spacing:2px;margin-bottom:16px}
+.c3 .top3 .big{font-size:3rem;font-weight:900;line-height:1}
+.c3 .top3 .big small{font-size:1.1rem;font-weight:400;opacity:0.8}
+.c3 .bot3{padding:24px;text-align:center;background:#fff}
+.c3 .bot3 .info{display:flex;justify-content:center;gap:24px;margin-bottom:16px}
+.c3 .bot3 .info div{text-align:center}
+.c3 .bot3 .info div b{display:block;font-size:1rem;color:#3d2b1f}
+.c3 .bot3 .info div span{font-size:0.7rem;color:#999}
+.c3 .bot3 .wx{display:inline-block;padding:8px 24px;background:#fef3c7;border-radius:20px;font-size:0.85rem;color:#8b6914;font-weight:600;margin-bottom:8px}
+.c3 .bot3 .note{font-size:0.72rem;color:#bbb}
 </style>
 </head>
 <body>
-<div class="card">
-  <!-- 顶部 -->
-  <div class="hero">
-    <div class="hero-bg">
-      <div class="circle1"></div>
-      <div class="circle2"></div>
-      <div class="circle3"></div>
-    </div>
-    <div class="price-badge">
-      <div class="amount">¥29.9</div>
-      <div class="unit">/盒包邮</div>
-    </div>
-    <div class="hero-title">
-      <span>内蒙古大草原 · 天然馈赠</span>
+
+<!-- ====== 第1张：封面吸引 ====== -->
+<div class="c c1">
+  <div class="top">
+    <div class="circle"></div><div class="circle2"></div>
+    <div class="tc">
+      <div class="tag">内蒙古大草原</div>
       <h1>苦荞茶杯茶</h1>
+      <p>天然馈赠 · 健康之选</p>
     </div>
   </div>
-
-  <!-- 卖点 -->
-  <div class="section">
-    <div class="section-title">为什么选择我们的苦荞茶</div>
-    <div class="grid-4">
-      <div class="grid-item"><span class="ico">🏔️</span><b>高海拔种植</b><span>内蒙高原2000米+</span></div>
-      <div class="grid-item"><span class="ico">🌾</span><b>天然无添加</b><span>零农药·零化肥</span></div>
-      <div class="grid-item"><span class="ico">💛</span><b>汤色金黄</b><span>麦香浓郁·回甘</span></div>
-      <div class="grid-item"><span class="ico">☕</span><b>独立杯装</b><span>1杯1泡·随身带</span></div>
-      <div class="grid-item"><span class="ico">🛡️</span><b>富含芦丁</b><span>三高人群放心喝</span></div>
-      <div class="grid-item"><span class="ico">🔄</span><b>耐泡实惠</b><span>一杯可泡5次+</span></div>
-      <div class="grid-item"><span class="ico">🏕️</span><b>草原直供</b><span>牧民手工挑选</span></div>
-      <div class="grid-item"><span class="ico">🎁</span><b>送礼首选</b><span>健康体面有面子</span></div>
-    </div>
-  </div>
-
-  <!-- 对比 -->
-  <div class="section" style="padding-top:0">
-    <div class="section-title">我们 vs 普通苦荞茶</div>
-    <div class="compare">
-      <div class="col">
-        <div class="h">对比项</div>
-        <div>产地</div><div>海拔</div><div>工艺</div><div>包装</div><div>口感</div>
-      </div>
-      <div class="col">
-        <div class="h" style="color:#c0392b">👑 我们的</div>
-        <div>内蒙古</div><div>2000m+</div><div>传统炒制</div><div>独立杯装</div><div>金黄回甘</div>
-      </div>
-      <div class="col">
-        <div class="h" style="color:#0e6655">❌ 普通的</div>
-        <div>四川/云南</div><div>1000m</div><div>机器加工</div><div>散装大袋</div><div>苦涩味重</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 信任 -->
-  <div class="section" style="padding-top:0">
-    <div class="trust">
-      <div class="trust-item"><b>100%</b>纯苦荞</div>
-      <div class="trust-item"><b>0</b>添加剂</div>
-      <div class="trust-item"><b>20杯</b>/盒</div>
-      <div class="trust-item"><b>5次+</b>耐泡度</div>
-    </div>
-  </div>
-
-  <!-- 购买 -->
-  <a class="cta-btn" onclick="alert('添加微信 Pwwdb-520 下单\n买二送一·全国包邮')">🛒 立即购买 · 买二送一</a>
-  <div class="cta-sub">加微信 Pwwdb-520 · 全国包邮</div>
-
-  <div class="footer">
-    内蒙特产 · 送礼养生 · 自饮待客 <span>✦ 健康每一天 ✦</span>
+  <div class="bot">
+    <div class="price">¥29.9<small>/盒</small></div>
+    <div class="sub">买二送一 · 全国包邮 · 一盒20杯</div>
   </div>
 </div>
+
+<!-- ====== 第2张：凭什么买 ====== -->
+<div class="c c2">
+  <div class="top2"><div class="t2">为什么选我们的苦荞茶</div></div>
+  <div class="g">
+    <div class="gi"><span class="ic">🏔️</span><b>高原2000米+</b><em>内蒙天然种植</em></div>
+    <div class="gi"><span class="ic">🌾</span><b>零添加零农药</b><em>纯天然无污染</em></div>
+    <div class="gi"><span class="ic">💛</span><b>汤色金黄回甘</b><em>麦香浓郁好喝</em></div>
+    <div class="gi"><span class="ic">☕</span><b>独立杯装设计</b><em>1杯1泡随身带</em></div>
+    <div class="gi"><span class="ic">🛡️</span><b>富含天然芦丁</b><em>三高人群放心</em></div>
+    <div class="gi"><span class="ic">🔄</span><b>一杯泡5次+</b><em>耐泡又实惠</em></div>
+    <div class="gi"><span class="ic">🏕️</span><b>草原牧民直供</b><em>手工挑选炒制</em></div>
+    <div class="gi"><span class="ic">🎁</span><b>送礼健康体面</b><em>长辈领导都爱</em></div>
+  </div>
+  <div class="compare">
+    <div class="col"><div class="ch">对比</div><div>产地</div><div>海拔</div><div>包装</div><div>口感</div></div>
+    <div class="col"><div class="ch" style="color:#c0392b">👑 我们</div><div>内蒙古</div><div>2000m+</div><div>独立杯装</div><div>金黄回甘</div></div>
+    <div class="col"><div class="ch" style="color:#0e6655">普通</div><div>四川云南</div><div>~1000m</div><div>散装大袋</div><div>苦涩味重</div></div>
+  </div>
+</div>
+
+<!-- ====== 第3张：下单 ====== -->
+<div class="c c3">
+  <div class="top3">
+    <div class="t3">🎁 限时活动</div>
+    <div class="big">¥29.9<small>/盒</small></div>
+    <div style="margin-top:8px;opacity:0.9;">原价 ¥59.9 · 买二送一 · 包邮</div>
+  </div>
+  <div class="bot3">
+    <div class="info">
+      <div><b>100%</b><span>纯苦荞</span></div>
+      <div><b>0</b><span>添加剂</span></div>
+      <div><b>20杯</b><span>/盒</span></div>
+      <div><b>5次+</b><span>耐泡度</span></div>
+    </div>
+    <div class="wx">📱 微信下单：Pwwdb-520</div>
+    <div class="note">内蒙特产直发 · 48小时内发货 · 支持7天无理由</div>
+  </div>
+</div>
+
 </body>
 </html>
