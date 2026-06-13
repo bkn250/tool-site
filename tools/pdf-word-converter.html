@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF与Word互转 - 免费在线转换工具</title>
+  <meta name="description" content="免费在线PDF转Word、Word转PDF工具，浏览器本地处理不上传服务器，保护隐私安全。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/pdf-word-converter.html">
+  <meta property="og:title" content="PDF与Word互转 - 免费在线转换工具">
+  <meta property="og:url" content="https://pwwdb.com/tools/pdf-word-converter.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"PDF与Word互转","url":"https://pwwdb.com/tools/pdf-word-converter.html","description":"免费在线PDF转Word、Word转PDF，浏览器本地处理。","applicationCategory":"Document","operatingSystem":"All"}</script>
+  <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+  <style>
+    .print-only { display:none; }
+    @media print {
+      body * { visibility:hidden; }
+      #printArea, #printArea * { visibility:visible; }
+      #printArea { position:absolute; left:0; top:0; width:100%; padding:40px; }
+      .no-print { display:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar"><div class="navbar-inner"><a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a><div class="navbar-actions"><span class="tool-count" id="toolStatus">📄 待上传</span><button class="theme-toggle" id="themeToggle">🌙</button></div></div></nav>
+
+  <div class="tool-page">
+    <div class="tool-header"><a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a><h1>📄 PDF ⇄ Word 互转</h1><p>PDF 转 Word + Word 转 PDF，一个页面全搞定。所有转换在浏览器本地完成，不上传服务器。</p></div>
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <!-- Tab 切换 -->
+      <div class="tabs">
+        <button class="tab active" data-tab="pdf2word">📄 PDF → Word</button>
+        <button class="tab" data-tab="word2pdf">📝 Word → PDF</button>
+      </div>
+
+      <!-- ==================== PDF → Word ==================== -->
+      <div id="tab-pdf2word" class="tab-content">
+        <div class="file-upload-area" id="pdfUpload">
+          <div class="upload-icon">📁</div><p>拖拽 PDF 文件，或 <strong>点击选择</strong></p>
+          <p style="font-size:0.8rem;margin-top:8px;">支持 PDF 文件，最大 50MB</p>
+          <input type="file" id="pdfFileInput" accept=".pdf,application/pdf">
+        </div>
+        <div id="pdfPanel" style="display:none;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0;padding:12px 16px;background:var(--bg);border-radius:8px;">
+            <div><strong id="pdfFileName">-</strong><br><span style="font-size:0.85rem;color:var(--text-muted);" id="pdfFileInfo">-</span></div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-primary" id="pdf2wordBtn">🔄 转换为 Word</button>
+              <button class="btn btn-secondary" id="pdfResetBtn">重选</button>
+            </div>
+          </div>
+          <div id="pdfProgress" style="display:none;margin:12px 0;">
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px;"><span id="pdfProgressText">解析中</span><span id="pdfProgressPercent">0%</span></div>
+            <div class="strength-meter"><div class="strength-meter-bar" id="pdfProgressBar" style="width:0%;background:var(--primary);"></div></div>
+          </div>
+          <label>提取的文本（可编辑后导出）<span id="totalChars" style="font-size:0.82rem;color:var(--text-muted);float:right;">0 字符</span></label>
+          <textarea id="pdfTextResult" rows="14" style="min-height:280px;font-family:inherit;" placeholder="PDF 文本将显示在这里..."></textarea>
+          <div class="btn-group" style="margin-top:12px;">
+            <button class="btn btn-success" id="downloadWordBtn">📥 下载 Word</button>
+            <button class="btn btn-secondary" id="downloadTxtBtn">📥 下载 txt</button>
+            <button class="btn btn-secondary" id="copyPdfTextBtn">📋 复制</button>
+          </div>
+          <div style="margin-top:16px;"><label>页面预览</label><div id="pdfPagesPreview" style="max-height:400px;overflow-y:auto;"></div></div>
+        </div>
+      </div>
+
+      <!-- ==================== Word → PDF ==================== -->
+      <div id="tab-word2pdf" class="tab-content" style="display:none;">
+        <div class="file-upload-area" id="wordUpload">
+          <div class="upload-icon">📝</div><p>拖拽 Word 文件，或 <strong>点击选择</strong></p>
+          <p style="font-size:0.8rem;margin-top:8px;">支持 .docx 文件，最大 20MB</p>
+          <input type="file" id="wordFileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        </div>
+        <div id="wordPanel" style="display:none;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0;padding:12px 16px;background:var(--bg);border-radius:8px;">
+            <div><strong id="wordFileName">-</strong><br><span style="font-size:0.85rem;color:var(--text-muted);" id="wordFileInfo">-</span></div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-primary" id="word2pdfBtn">🔄 转换为 PDF</button>
+              <button class="btn btn-secondary" id="wordResetBtn">重选</button>
+            </div>
+          </div>
+          <div id="wordProgress" style="display:none;margin:12px 0;">
+            <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px;"><span id="wordProgressText">解析中</span></div>
+            <div class="strength-meter"><div class="strength-meter-bar" id="wordProgressBar" style="width:0%;background:var(--primary);"></div></div>
+          </div>
+          <label>预览</label>
+          <div id="wordPreview" style="border:1px solid var(--border);border-radius:8px;padding:24px;min-height:300px;max-height:500px;overflow-y:auto;background:var(--bg);line-height:1.8;"></div>
+          <div class="btn-group" style="margin-top:12px;">
+            <button class="btn btn-success" id="downloadPdfBtn">📥 下载 PDF</button>
+            <button class="btn btn-secondary" id="printPdfBtn">🖨️ 打印 PDF</button>
+          </div>
+        </div>
+        <!-- 打印区域 -->
+        <div id="printArea" class="print-only"></div>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:16px;">
+      ⚡ 所有处理在浏览器本地完成，文件不会上传到任何服务器。<br>
+      📌 PDF → Word：使用 PDF.js 解析生成可编辑 Word 文档<br>
+      📌 Word → PDF：解析 docx 文件后通过浏览器 "另存为 PDF" 保存
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com · <span style="cursor:pointer;color:var(--primary);" onclick="alert('微信: Pwwdb-520\n邮箱: 455074219@qq.com')">💬 联系我</span></p></div></footer>
+  <div class="copy-toast" id="copyToast">✅ 已复制</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@8/build/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1/mammoth.browser.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/pdf-word-converter.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>
