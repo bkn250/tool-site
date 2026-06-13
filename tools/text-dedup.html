@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>重复文本去重 - 免费在线去重工具</title>
+  <meta name="description" content="免费在线文本去重工具，快速删除重复行、重复内容，支持排序和统计。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/text-dedup.html">
+  <meta property="og:title" content="重复文本去重 - 免费在线去重工具">
+  <meta property="og:url" content="https://pwwdb.com/tools/text-dedup.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"重复文本去重","url":"https://pwwdb.com/tools/text-dedup.html","description":"免费在线文本去重工具","applicationCategory":"Utility","operatingSystem":"All"}</script>
+  <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+</head>
+<body>
+  <nav class="navbar"><div class="navbar-inner"><a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a><div class="navbar-actions"><button class="theme-toggle" id="themeToggle">🌙</button></div></div></nav>
+  <div class="tool-page">
+    <div class="tool-header"><a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a><h1>🧹 重复文本去重</h1><p>快速删除重复行，支持排序、统计、导出。</p></div>
+    <div class="ad-container">📢 广告位招租</div>
+    <div class="tool-body">
+      <div class="btn-group" style="margin-bottom:16px;">
+        <button class="btn btn-primary" id="dedupBtn">🧹 去重</button>
+        <button class="btn btn-secondary" id="sortBtn">📶 排序</button>
+        <button class="btn btn-secondary" id="countBtn">📊 统计频次</button>
+        <button class="btn btn-secondary" id="clearDedupBtn">🗑️ 清空</button>
+      </div>
+      <div class="split-panel">
+        <div class="form-group"><label>输入文本（每行一条）</label><textarea id="dedupInput" rows="12" style="font-family:inherit;min-height:200px;" placeholder="粘贴需要去重的文本，每行一条..."></textarea></div>
+        <div class="form-group"><label>输出结果</label><textarea id="dedupOutput" rows="12" style="font-family:inherit;min-height:200px;" readonly></textarea></div>
+      </div>
+      <div id="dedupStats" style="font-size:0.85rem;color:var(--text-muted);"></div>
+      <div class="btn-group" style="margin-top:12px;">
+        <button class="btn btn-success" id="copyDedupBtn">📋 复制结果</button>
+        <button class="btn btn-secondary" id="downloadDedupBtn">📥 下载</button>
+      </div>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com</p></div></footer>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/text-dedup.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>
