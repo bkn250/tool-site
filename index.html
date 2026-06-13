@@ -243,7 +243,52 @@
     <div class="ad-container">
       <span>📢 广告位招租</span>
     </div>
+
+    <!-- 联系与合作 -->
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px 24px;margin:0 0 32px;text-align:center;max-width:1200px;margin-left:auto;margin-right:auto;">
+      <h2 style="font-size:1.4rem;margin-bottom:8px;color:var(--text);">🤝 需要定制开发？</h2>
+      <p style="color:var(--text-secondary);margin-bottom:20px;font-size:0.95rem;">网站搭建 · 微信小程序 · AI 工具 · 自动化脚本 · 接外包代写代码</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 24px;text-align:center;min-width:140px;">
+          <div style="font-size:1.5rem;margin-bottom:4px;">💬</div>
+          <div style="font-weight:600;color:var(--text);margin-bottom:4px;">微信</div>
+          <div style="font-size:0.9rem;color:var(--primary);font-weight:500;">bkn250</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 24px;text-align:center;min-width:140px;">
+          <div style="font-size:1.5rem;margin-bottom:4px;">📧</div>
+          <div style="font-weight:600;color:var(--text);margin-bottom:4px;">邮箱</div>
+          <div style="font-size:0.9rem;color:var(--primary);font-weight:500;">455074219@qq.com</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 24px;text-align:center;min-width:140px;">
+          <div style="font-size:1.5rem;margin-bottom:4px;">🐙</div>
+          <div style="font-weight:600;color:var(--text);margin-bottom:4px;">GitHub</div>
+          <a href="https://github.com/bkn250/tool-site" target="_blank" rel="noopener" style="font-size:0.9rem;font-weight:500;">github.com/bkn250</a>
+        </div>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-top:16px;">📌 工具改进建议 | 网站/小程序定制 | 技术外包 欢迎联系</p>
+    </div>
   </main>
+
+  <!-- 悬浮联系按钮 -->
+  <a href="javascript:copyContact()" id="floatContactBtn" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:12px 24px;font-size:0.9rem;cursor:pointer;box-shadow:0 4px 16px rgba(79,70,229,0.4);display:flex;align-items:center;gap:8px;text-decoration:none;transition:all var(--transition);">
+    <span style="font-size:1.2rem;">💬</span> 联系我
+  </a>
+  <script>
+    function copyContact() {
+      const info = '微信: bkn250\n邮箱: 455074219@qq.com\n\n需要：网站开发/小程序/AI工具/代写代码 欢迎咨询';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(info).then(function() {
+          var toast = document.getElementById('copyToast');
+          toast.textContent = '✅ 已复制联系方式！微信: bkn250';
+          toast.classList.add('show');
+          clearTimeout(toast._timer);
+          toast._timer = setTimeout(function(){ toast.classList.remove('show'); toast.textContent = '✅ 已复制到剪贴板'; }, 3000);
+        });
+      } else {
+        alert('微信: bkn250\n邮箱: 455074219@qq.com');
+      }
+    }
+  </script>
 
   <!-- 页脚 -->
   <footer class="footer">
