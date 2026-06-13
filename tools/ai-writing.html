@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI写作助手 - 免费在线AI写文章工具</title>
+  <meta name="description" content="免费在线AI写作助手，支持文章写作、营销文案、小红书笔记、工作总结等多种写作场景，输入主题即可生成。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/ai-writing.html">
+  <meta property="og:title" content="AI写作助手 - 免费在线AI写文章工具">
+  <meta property="og:url" content="https://pwwdb.com/tools/ai-writing.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AI写作助手","url":"https://pwwdb.com/tools/ai-writing.html","description":"免费在线AI写作助手，多种写作模板","applicationCategory":"Utility","operatingSystem":"All"}</script>
+  <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+  <style>
+    .writing-modes { display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:16px; }
+    .writing-mode-btn { padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg-card);color:var(--text);cursor:pointer;text-align:center;transition:all var(--transition);font-family:inherit;font-size:0.85rem; }
+    .writing-mode-btn:hover { border-color:var(--primary);background:var(--primary-light); }
+    .writing-mode-btn.active { border-color:var(--primary);background:var(--primary);color:#fff; }
+    .writing-mode-btn .icon { font-size:1.3rem;display:block;margin-bottom:4px; }
+    .writing-mode-btn .label { font-size:0.8rem; }
+    .thinking-bubble { background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin:12px 0;display:none; }
+    .thinking-bubble .dot { display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--primary);margin:0 3px;animation:bounce 1.4s infinite; }
+    .thinking-bubble .dot:nth-child(2) { animation-delay:0.2s; }
+    .thinking-bubble .dot:nth-child(3) { animation-delay:0.4s; }
+    @keyframes bounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+    .api-key-input { display:flex;gap:8px;align-items:center; }
+    .api-key-input input { flex:1;font-family:monospace;letter-spacing:1px; }
+    .output-content { line-height:1.8;white-space:pre-wrap;font-size:0.92rem; }
+    .output-content h1,.output-content h2,.output-content h3 { margin:1em 0 0.5em; }
+    .streaming-cursor::after { content:'|';animation:blink 0.8s infinite;color:var(--primary); }
+    @keyframes blink { 50%{opacity:0} }
+    .word-count { text-align:right;font-size:0.8rem;color:var(--text-muted);margin-top:4px; }
+    .model-select { display:flex;gap:12px;flex-wrap:wrap;margin:8px 0; }
+    .model-select label { display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer; }
+  </style>
+</head>
+<body>
+  <nav class="navbar"><div class="navbar-inner"><a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a><div class="navbar-actions"><button class="theme-toggle" id="themeToggle">🌙</button></div></div></nav>
+  <div class="tool-page">
+    <div class="tool-header"><a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a><h1>🤖 AI 写作助手</h1><p>输入主题，AI 帮你写文章、文案、小红书笔记、工作总结等。</p></div>
+    <div class="ad-container">📢 广告位招租</div>
+    <div class="tool-body">
+      <!-- API Key 配置 -->
+      <div class="alert alert-info" style="margin-bottom:16px;font-size:0.85rem;">
+        💡 需要填写 API Key 才能使用。你的 Key 只保存在浏览器本地，不会上传到我们的服务器。
+      </div>
+      <div class="form-group">
+        <label>DeepSeek API Key <span style="font-size:0.75rem;color:var(--text-muted);">（需要先申请：platform.deepseek.com）</span></label>
+        <div class="api-key-input">
+          <input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+          <button class="btn btn-secondary" id="toggleKeyBtn" style="padding:8px 12px;">👁️</button>
+          <button class="btn btn-primary" id="saveKeyBtn">保存</button>
+        </div>
+        <div id="keyStatus" style="font-size:0.8rem;color:var(--success);margin-top:4px;display:none;">✅ Key 已保存</div>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+
+      <!-- 写作场景 -->
+      <div class="form-group">
+        <label>写作场景</label>
+        <div class="writing-modes" id="writingModes">
+          <button class="writing-mode-btn active" data-prompt="请帮我写一篇关于【{topic}】的文章，要求内容充实、逻辑清晰、语言流畅，字数约800字。"><span class="icon">📝</span><span class="label">文章写作</span></button>
+          <button class="writing-mode-btn" data-prompt="请帮我写一份关于【{topic}】的营销推广文案，要求吸引人、有说服力，适合发布在朋友圈和社交媒体。"><span class="icon">📢</span><span class="label">营销文案</span></button>
+          <button class="writing-mode-btn" data-prompt="请用小红书的风格写一篇关于【{topic}】的笔记，要求：标题吸引人、内容真实有用、加入emoji表情、语气亲切自然，末尾加上相关话题标签。"><span class="icon">📕</span><span class="label">小红书笔记</span></button>
+          <button class="writing-mode-btn" data-prompt="请帮我写一份关于【{topic}】的工作总结/汇报，要求结构清晰、重点突出、数据详实，适合在周报或年终总结中使用。"><span class="icon">💼</span><span class="label">工作总结</span></button>
+          <button class="writing-mode-btn" data-prompt="请帮我写一篇关于【{topic}】的公众号文章，要求标题吸引点击、内容有深度、段落分明、适合微信阅读习惯。"><span class="icon">📱</span><span class="label">公众号文章</span></button>
+          <button class="writing-mode-btn" data-prompt="请帮我将以下内容【{topic}】用更简洁的语言总结要点，用分点形式列出核心内容。"><span class="icon">📋</span><span class="label">内容总结</span></button>
+          <button class="writing-mode-btn" data-prompt="请帮我想关于【{topic}】的创意和灵感，要求有创新性、可执行，给出5-8个不同角度的建议。"><span class="icon">💡</span><span class="label">创意灵感</span></button>
+          <button class="writing-mode-btn" data-prompt="请以【{topic}】为主题写一首诗或一段优美的文字，要求有文学性、情感丰富。"><span class="icon">🎭</span><span class="label">诗歌创作</span></button>
+        </div>
+      </div>
+
+      <!-- 输入 -->
+      <div class="form-group">
+        <label for="aiTopic">输入主题或内容</label>
+        <textarea id="aiTopic" rows="4" style="font-family:inherit;min-height:80px;" placeholder="例如：如何提高工作效率、推荐一部好电影、我的家乡..."></textarea>
+        <div class="word-count"><span id="topicCount">0</span> 字</div>
+      </div>
+
+      <!-- 模型选择 -->
+      <div class="form-group">
+        <label>模型</label>
+        <div class="model-select">
+          <label><input type="radio" name="aimodel" value="deepseek-v4-flash" checked> DeepSeek V4 Flash（快速）</label>
+          <label><input type="radio" name="aimodel" value="deepseek-v4-pro"> DeepSeek V4 Pro（更强）</label>
+        </div>
+      </div>
+
+      <!-- 生成按钮 -->
+      <div class="btn-group">
+        <button class="btn btn-primary" id="generateBtn">✨ 开始生成</button>
+        <button class="btn btn-secondary" id="stopBtn" style="display:none;">⏹️ 停止</button>
+        <button class="btn btn-secondary" id="clearAiBtn">🗑️ 清空</button>
+      </div>
+
+      <!-- 思考动画 -->
+      <div class="thinking-bubble" id="thinkingBubble">
+        <span>🤖 AI 正在思考</span>
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span style="font-size:0.8rem;color:var(--text-muted);margin-left:12px;" id="thinkingHint">首次生成可能需要加载模型</span>
+      </div>
+
+      <!-- 输出 -->
+      <div class="form-group" style="margin-top:16px;">
+        <label>生成结果 <span id="outputWordCount" style="font-size:0.8rem;color:var(--text-muted);"></span></label>
+        <div class="output-area" id="aiOutput" style="min-height:300px;white-space:pre-wrap;font-family:inherit;line-height:1.8;font-size:0.92rem;padding:20px;">
+          点击"开始生成"生成内容...
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-success" id="copyAiBtn">📋 复制结果</button>
+        <button class="btn btn-secondary" id="downloadAiBtn">📥 下载为 .txt</button>
+      </div>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com · AI 写作基于 DeepSeek API</p></div></footer>
+  <div class="copy-toast" id="copyToast">✅ 已复制</div>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/ai-writing.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>
