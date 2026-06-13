@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>在线工具箱 - 免费好用的在线工具 (8款神器)</title>
+  <title>在线工具箱 - 免费好用的在线工具 (13款神器)</title>
   <meta name="description" content="免费在线工具集合：视频去水印、图片压缩/OCR文字识别、二维码生成、PDF转Word、短链接、密码生成器、单位换算、Base64编解码、JSON格式化、文本对比、Markdown编辑器等13款实用工具，无需下载安装，即开即用。">
   <meta name="keywords" content="在线工具,视频去水印,图片压缩,OCR文字识别,二维码生成,PDF转Word,短链接,密码生成器,单位换算,Base64,JSON格式化,文本对比,Markdown编辑器,免费工具">
   <link rel="stylesheet" href="css/style.css">
   <link rel="canonical" href="https://pwwdb.com/">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="在线工具箱 - 免费好用的在线工具 (9款神器)">
+  <meta property="og:title" content="在线工具箱 - 免费好用的在线工具 (13款神器)">
   <meta property="og:description" content="免费在线工具集合：图片压缩/OCR文字识别、二维码生成、短链接、密码生成器、JSON格式化、文本对比、Markdown编辑器等实用工具，无需下载安装，即开即用。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://pwwdb.com">
@@ -92,11 +92,28 @@
       <span>📢 广告位招租（流量起来后挂Google AdSense）</span>
     </div>
 
+    <!-- 搜索和筛选 -->
+    <div class="search-section" style="margin-bottom:24px;">
+      <div class="search-bar" style="position:relative;margin-bottom:12px;">
+        <span style="position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--text-muted);pointer-events:none;">🔍</span>
+        <input type="text" id="searchInput" placeholder="搜索工具名称，如：PDF、图片、二维码..." style="width:100%;padding:14px 16px 14px 48px;border:2px solid var(--border);border-radius:12px;background:var(--bg-card);color:var(--text);font-size:1rem;outline:none;transition:all var(--transition);font-family:inherit;">
+        <span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:4px;border:1px solid var(--border);">/ 快速搜索</span>
+      </div>
+      <div class="category-filters" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="category-btn active" data-cat="all" style="padding:6px 16px;border:1px solid var(--border);border-radius:20px;background:var(--primary);color:#fff;cursor:pointer;font-size:0.85rem;font-family:inherit;transition:all var(--transition);">🏠 全部</button>
+        <button class="category-btn" data-cat="热门工具" style="padding:6px 16px;border:1px solid var(--border);border-radius:20px;background:var(--bg-card);color:var(--text);cursor:pointer;font-size:0.85rem;font-family:inherit;transition:all var(--transition);">🔥 热门</button>
+        <button class="category-btn" data-cat="开发者工具" style="padding:6px 16px;border:1px solid var(--border);border-radius:20px;background:var(--bg-card);color:var(--text);cursor:pointer;font-size:0.85rem;font-family:inherit;transition:all var(--transition);">💻 开发</button>
+        <button class="category-btn" data-cat="实用工具" style="padding:6px 16px;border:1px solid var(--border);border-radius:20px;background:var(--bg-card);color:var(--text);cursor:pointer;font-size:0.85rem;font-family:inherit;transition:all var(--transition);">📋 实用</button>
+        <button class="category-btn" data-cat="安全工具" style="padding:6px 16px;border:1px solid var(--border);border-radius:20px;background:var(--bg-card);color:var(--text);cursor:pointer;font-size:0.85rem;font-family:inherit;transition:all var(--transition);">🔒 安全</button>
+        <button class="category-btn" data-cat="写作工具" style="padding:6px 16px;border:1px solid var(--border);border-radius:20px;background:var(--bg-card);color:var(--text);cursor:pointer;font-size:0.85rem;font-family:inherit;transition:all var(--transition);">✍️ 写作</button>
+      </div>
+    </div>
+
     <!-- 工具卡片网格 -->
     <section aria-label="工具列表">
       <div class="tools-grid" id="toolsGrid">
         <!-- 图片压缩 -->
-        <a href="tools/image-compress.html" class="tool-card" data-tool>
+        <a href="tools/image-compress.html" class="tool-card" data-tool data-category="热门工具" data-keywords="图片压缩 图片压缩 图片大小 压缩图片 jpg png webp 图片优化">
           <div class="tool-card-icon purple">🖼️</div>
           <h3>图片压缩</h3>
           <p>在线压缩 JPEG、PNG、WebP 图片，保持画质的同时减小文件体积。</p>
@@ -104,15 +121,15 @@
         </a>
 
         <!-- 二维码生成 -->
-        <a href="tools/qrcode.html" class="tool-card" data-tool>
+        <a href="tools/qrcode.html" class="tool-card" data-tool data-category="实用工具" data-keywords="二维码 二维码生成 qrcode 扫码 二维码制作 wifi二维码">
           <div class="tool-card-icon blue">📱</div>
           <h3>二维码生成器</h3>
           <p>将文本、网址、WiFi信息等生成二维码，支持下载高清PNG。</p>
-          <span class="tool-card-badge">免费工具</span>
+          <span class="tool-card-badge">实用工具</span>
         </a>
 
         <!-- JSON 格式化 -->
-        <a href="tools/json-formatter.html" class="tool-card" data-tool>
+        <a href="tools/json-formatter.html" class="tool-card" data-tool data-category="开发者工具" data-keywords="json json格式化 json校验 json压缩 格式化 数据格式化">
           <div class="tool-card-icon green">{ }</div>
           <h3>JSON 格式化</h3>
           <p>格式化、校验、压缩 JSON 数据，支持树形查看和错误定位。</p>
@@ -120,7 +137,7 @@
         </a>
 
         <!-- 文本对比 -->
-        <a href="tools/text-diff.html" class="tool-card" data-tool>
+        <a href="tools/text-diff.html" class="tool-card" data-tool data-category="实用工具" data-keywords="文本对比 文本差异 文件对比 文本比较 diff 对比工具">
           <div class="tool-card-icon orange">📝</div>
           <h3>文本对比</h3>
           <p>对比两段文本的差异，高亮显示新增和删除的内容。</p>
@@ -128,7 +145,7 @@
         </a>
 
         <!-- Markdown 编辑器 -->
-        <a href="tools/markdown-editor.html" class="tool-card" data-tool>
+        <a href="tools/markdown-editor.html" class="tool-card" data-tool data-category="写作工具" data-keywords="markdown markdown编辑器 md编辑器 md 写作 文档 富文本">
           <div class="tool-card-icon pink">📄</div>
           <h3>Markdown 编辑器</h3>
           <p>在线编写 Markdown，实时预览渲染效果，支持导出HTML。</p>
@@ -136,7 +153,7 @@
         </a>
 
         <!-- 密码生成器 -->
-        <a href="tools/password-generator.html" class="tool-card" data-tool>
+        <a href="tools/password-generator.html" class="tool-card" data-tool data-category="安全工具" data-keywords="密码 密码生成 随机密码 强密码 密码安全 密码管理">
           <div class="tool-card-icon orange">🔑</div>
           <h3>密码生成器</h3>
           <p>生成高强度随机密码，可配置长度和字符类型，保护账户安全。</p>
@@ -144,7 +161,7 @@
         </a>
 
         <!-- 短链接生成 -->
-        <a href="tools/url-shortener.html" class="tool-card" data-tool>
+        <a href="tools/url-shortener.html" class="tool-card" data-tool data-category="实用工具" data-keywords="短链接 短网址 缩短链接 网址缩短 url缩短 短链">
           <div class="tool-card-icon teal">🔗</div>
           <h3>短链接生成器</h3>
           <p>将长网址变成短链接，方便分享，支持历史记录。</p>
@@ -152,7 +169,7 @@
         </a>
 
         <!-- 图片转文字 OCR -->
-        <a href="tools/image-ocr.html" class="tool-card" data-tool>
+        <a href="tools/image-ocr.html" class="tool-card" data-tool data-category="热门工具" data-keywords="图片转文字 ocr 文字识别 图片文字提取 识别 扫描">
           <div class="tool-card-icon pink">📄</div>
           <h3>图片转文字 (OCR)</h3>
           <p>识别图片中的文字，支持中文英文，浏览器本地识别保护隐私。</p>
@@ -160,7 +177,7 @@
         </a>
 
         <!-- PDF 转 Word -->
-        <a href="tools/pdf-to-word.html" class="tool-card" data-tool>
+        <a href="tools/pdf-to-word.html" class="tool-card" data-tool data-category="热门工具" data-keywords="pdf转word pdf word pdf转换 pdf编辑 文档转换 文档编辑">
           <div class="tool-card-icon blue">📄</div>
           <h3>PDF 转 Word</h3>
           <p>将 PDF 文件转换为可编辑的 Word 文档，支持页码和格式保留。</p>
@@ -168,7 +185,7 @@
         </a>
 
         <!-- 单位换算 -->
-        <a href="tools/unit-converter.html" class="tool-card" data-tool>
+        <a href="tools/unit-converter.html" class="tool-card" data-tool data-category="实用工具" data-keywords="单位换算 长度换算 重量换算 温度换算 面积换算 体积换算 转换器">
           <div class="tool-card-icon green">📏</div>
           <h3>单位换算</h3>
           <p>长度、重量、温度、面积、体积，一键互相换算。</p>
@@ -176,7 +193,7 @@
         </a>
 
         <!-- Base64 编解码 -->
-        <a href="tools/base64.html" class="tool-card" data-tool>
+        <a href="tools/base64.html" class="tool-card" data-tool data-category="开发者工具" data-keywords="base64 base64编码 base64解码 编码 解码 图片转base64">
           <div class="tool-card-icon purple">🔐</div>
           <h3>Base64 编解码</h3>
           <p>Base64 编码、解码、图片转 Base64，开发者必备。</p>
@@ -184,7 +201,7 @@
         </a>
 
         <!-- 重复文本去重 -->
-        <a href="tools/text-dedup.html" class="tool-card" data-tool>
+        <a href="tools/text-dedup.html" class="tool-card" data-tool data-category="实用工具" data-keywords="文本去重 去重 重复行 重复文本 文字去重 数据清洗">
           <div class="tool-card-icon orange">🧹</div>
           <h3>重复文本去重</h3>
           <p>删除重复行、排序、统计频次，一键处理大量文本。</p>
@@ -192,7 +209,7 @@
         </a>
 
         <!-- 视频去水印 -->
-        <a href="tools/video-watermark-remover.html" class="tool-card" data-tool>
+        <a href="tools/video-watermark-remover.html" class="tool-card" data-tool data-category="热门工具" data-keywords="视频去水印 去水印 视频处理 去水印工具 视频编辑 水印去除">
           <div class="tool-card-icon pink">✂️</div>
           <h3>视频去水印</h3>
           <p>上传视频框选水印区域，模糊/马赛克处理，浏览器本地处理。</p>
@@ -200,12 +217,17 @@
         </a>
 
         <!-- 即将推出占位 -->
-        <div class="tool-card" style="opacity: 0.6; cursor: default;">
+        <div class="tool-card" style="opacity: 0.6; cursor: default; display:none;" id="moreComing">
           <div class="tool-card-icon teal">🔜</div>
           <h3>更多工具即将上线</h3>
-          <p>视频去水印、在线PS、思维导图...持续更新中，敬请期待。</p>
+          <p>在线PS、思维导图、音频转换...持续更新中，敬请期待。</p>
           <span class="tool-card-badge">即将推出</span>
         </div>
+      </div>
+      <div id="noResults" style="display:none;text-align:center;padding:60px 20px;color:var(--text-muted);">
+        <div style="font-size:3rem;margin-bottom:16px;">🔍</div>
+        <h3 style="margin-bottom:8px;">没有找到匹配的工具</h3>
+        <p>试试其他关键词，比如"图片""PDF""密码"</p>
       </div>
     </section>
 
@@ -230,7 +252,66 @@
   <div class="copy-toast" id="copyToast">✅ 已复制到剪贴板</div>
 
   <script src="js/main.js"></script>
-  <!-- 百度统计 / Google Analytics 可在此处添加 -->
+  <!-- 搜索筛选功能 -->
+  <script>
+    (function() {
+      const searchInput = document.getElementById('searchInput');
+      const toolCards = document.querySelectorAll('[data-tool]');
+      const categoryBtns = document.querySelectorAll('.category-btn');
+      const noResults = document.getElementById('noResults');
+      let activeCategory = 'all';
+
+      function filterTools() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        toolCards.forEach(card => {
+          const title = card.querySelector('h3').textContent.toLowerCase();
+          const desc = card.querySelector('p').textContent.toLowerCase();
+          const keywords = (card.dataset.keywords || '').toLowerCase();
+          const category = card.dataset.category || '';
+
+          const matchesSearch = !query || title.includes(query) || desc.includes(query) || keywords.includes(query);
+          const matchesCategory = activeCategory === 'all' || category === activeCategory;
+
+          card.style.display = (matchesSearch && matchesCategory) ? '' : 'none';
+          if (matchesSearch && matchesCategory) visibleCount++;
+        });
+
+        document.getElementById('toolCount').textContent = visibleCount;
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+
+      searchInput.addEventListener('input', filterTools);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== searchInput) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === 'Escape' && document.activeElement === searchInput) {
+          searchInput.blur();
+          searchInput.value = '';
+          filterTools();
+        }
+      });
+
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryBtns.forEach(b => {
+            b.style.background = b.dataset.cat === 'all' ? 'var(--primary)' : 'var(--bg-card)';
+            b.style.color = b.dataset.cat === 'all' ? '#fff' : 'var(--text)';
+          });
+          btn.style.background = 'var(--primary)';
+          btn.style.color = '#fff';
+          activeCategory = btn.dataset.cat;
+          filterTools();
+        });
+      });
+
+      document.getElementById('toolCount').textContent = toolCards.length;
+    })();
+  </script>
   <script>
     // 初始化主题
     (function() {
