@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDR查看器 - 免费在线CorelDRAW文件查看</title>
+  <meta name="description" content="免费在线CDR文件查看器，无需安装CorelDRAW，浏览器直接查看CDR文件内容。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/cdr-viewer.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CDR查看器","url":"https://pwwdb.com/tools/cdr-viewer.html","description":"免费在线CDR文件查看器","applicationCategory":"Multimedia","operatingSystem":"All"}</script>
+  <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+</head>
+<body>
+  <nav class="navbar"><div class="navbar-inner"><a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a><div class="navbar-actions"><button class="theme-toggle" id="themeToggle">🌙</button></div></div></nav>
+
+  <div class="tool-page">
+    <div class="tool-header"><a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a><h1>🎨 CDR 查看器</h1><p>上传 CorelDRAW (.cdr) 文件，查看预览图和文件信息。无需安装任何软件。</p></div>
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <div class="file-upload-area" id="uploadArea">
+        <div class="upload-icon">🎨</div>
+        <p>拖拽 CDR 文件到这里，或 <strong>点击选择</strong></p>
+        <p style="font-size:0.8rem;margin-top:8px;">支持 CDR X4 ~ 2024 版本，最大 100MB</p>
+        <input type="file" id="fileInput" accept=".cdr,application/x-cdr,application/cdr">
+      </div>
+
+      <div id="viewerPanel" style="display:none;">
+        <!-- 文件信息 -->
+        <div id="fileInfoBar" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 16px;background:var(--bg);border-radius:8px;margin-bottom:16px;">
+          <div><strong id="fileName">-</strong><br><span style="font-size:0.82rem;color:var(--text-muted);" id="fileMeta">-</span></div>
+          <button class="btn btn-secondary" id="resetBtn">🔄 重新选择</button>
+        </div>
+
+        <!-- 预览区 -->
+        <div style="background:var(--bg);border-radius:12px;padding:24px;text-align:center;min-height:300px;display:flex;align-items:center;justify-content:center;flex-direction:column;" id="previewArea">
+          <img id="previewImage" style="max-width:100%;max-height:600px;border-radius:8px;box-shadow:var(--shadow);display:none;">
+          <div id="noPreview" style="color:var(--text-muted);">
+            <div style="font-size:3rem;margin-bottom:8px;">📄</div>
+            <p>解析中...</p>
+          </div>
+        </div>
+
+        <!-- 页面列表 -->
+        <div style="margin-top:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <label style="margin:0;">📑 文件内容</label>
+            <span style="font-size:0.8rem;color:var(--text-muted);" id="pageCount"></span>
+          </div>
+          <div id="pageList" style="max-height:400px;overflow-y:auto;background:var(--bg);border-radius:8px;padding:8px;"></div>
+        </div>
+
+        <!-- 导出按钮 -->
+        <div class="btn-group" style="margin-top:12px;">
+          <button class="btn btn-success" id="exportPngBtn">📥 导出预览图</button>
+          <button class="btn btn-secondary" id="exportInfoBtn">📋 复制文件信息</button>
+        </div>
+      </div>
+
+      <div id="progressBar" style="display:none;margin:12px 0;">
+        <div class="strength-meter"><div class="strength-meter-bar" id="progressFill" style="width:0%;background:var(--primary);"></div></div>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:16px;">
+      💡 CDR 查看器通过解析 CDR 文件内部的 ZIP 结构提取预览图。<br>
+      📌 支持 CorelDRAW X4 及以上版本（使用 ZIP 格式存储的 CDR）。<br>
+      ⚠️ 旧版 CDR（X3 及以前）可能无法提取预览。
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com · <span style="cursor:pointer;color:var(--primary);" onclick="alert('微信: Pwwdb-520\n邮箱: 455074219@qq.com\n\n网站开发 | 小程序 | AI工具 | 代写代码')">💬 联系我</span></p></div></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/cdr-viewer.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s=='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>
