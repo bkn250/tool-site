@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube 视频下载器 - 在线下载 YouTube 视频</title>
+  <meta name="description" content="在线 YouTube 视频下载器，支持 MP4 视频下载和 MP3 音频提取，多种清晰度选择。学习研究工具，请遵守 YouTube 条款。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/youtube-downloader.html">
+  <meta property="og:title" content="YouTube 视频下载器 - 在线下载 YouTube 视频/音频">
+  <meta property="og:description" content="在线 YouTube 视频下载器，支持 MP4/MP3 下载，多种清晰度。学习研究工具。">
+  <meta property="og:url" content="https://pwwdb.com/tools/youtube-downloader.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "YouTube 视频下载器",
+    "url": "https://pwwdb.com/tools/youtube-downloader.html",
+    "description": "在线 YouTube 视频下载工具，支持视频和音频下载。",
+    "applicationCategory": "Multimedia",
+    "operatingSystem": "All"
+  }
+  </script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <!-- 百度统计 -->
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <style>
+    .video-preview { display:flex; gap:16px; align-items:flex-start; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-top:20px; }
+    .video-preview .thumb { width:320px; height:180px; border-radius:8px; object-fit:cover; background:var(--bg); flex-shrink:0; }
+    .video-preview .info { flex:1; min-width:0; }
+    .video-preview .info h3 { font-size:1.05rem; margin-bottom:6px; line-height:1.4; }
+    .video-preview .info .meta { font-size:0.82rem; color:var(--text-secondary); margin-bottom:4px; display:flex; gap:16px; flex-wrap:wrap; }
+    .video-preview .info .meta span { display:flex; align-items:center; gap:4px; }
+    .format-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px; margin-top:8px; }
+    .format-card { border:2px solid var(--border); border-radius:8px; padding:12px; cursor:pointer; transition:all var(--transition); text-align:center; background:var(--bg-card); }
+    .format-card:hover { border-color:var(--primary); }
+    .format-card.selected { border-color:var(--primary); background:var(--primary-light); }
+    .format-card .quality { font-weight:700; font-size:1.1rem; color:var(--text); }
+    .format-card .details { font-size:0.75rem; color:var(--text-secondary); margin-top:4px; }
+    .format-card .size { font-size:0.78rem; color:var(--text-muted); margin-top:2px; }
+    .progress-wrap { margin-top:16px; display:none; }
+    .progress-wrap .progress-bar { height:8px; background:var(--bg); border-radius:4px; overflow:hidden; margin-bottom:4px; }
+    .progress-wrap .progress-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--secondary)); border-radius:4px; transition:width 0.3s; width:0%; }
+    .progress-wrap .progress-text { text-align:center; font-size:0.78rem; color:var(--text-secondary); }
+    .notice-box { background:#fef3c7; border:1px solid #f59e0b; border-radius:var(--radius-sm); padding:12px 16px; margin-top:16px; font-size:0.8rem; color:#92400e; }
+    [data-theme="dark"] .notice-box { background:#422006; border-color:#d97706; color:#fde68a; }
+    .server-config { margin-top:20px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+    .server-config h4 { font-size:0.9rem; margin-bottom:8px; }
+    .server-config .input-row { display:flex; gap:8px; align-items:center; }
+    .server-config input { flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); font-family:monospace; font-size:0.85rem; }
+    .btn-sm { padding:6px 14px; font-size:0.8rem; }
+    @media(max-width:768px) {
+      .video-preview { flex-direction:column; }
+      .video-preview .thumb { width:100%; height:auto; aspect-ratio:16/9; }
+      .format-grid { grid-template-columns:repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo">
+        <span class="logo-icon">🔧</span>
+        <span>在线工具箱</span>
+      </a>
+      <div class="navbar-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>🎬 YouTube 视频下载器</h1>
+      <p>支持 MP4 视频（最高 8K）和 MP3 音频下载。粘贴链接 → 选格式 → 下载。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <!-- 输入 -->
+      <div class="form-group">
+        <label>📎 YouTube 视频链接</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="videoUrl" placeholder="粘贴 YouTube 链接，例如: https://www.youtube.com/watch?v=xxxxx 或 https://youtu.be/xxxxx" style="flex:1;">
+          <button class="btn btn-primary" onclick="fetchInfo()">🔍 解析视频</button>
+        </div>
+      </div>
+
+      <!-- 加载中 -->
+      <div id="loadingArea" style="display:none;text-align:center;padding:40px;">
+        <p style="font-size:1.2rem;">⏳ 正在解析视频信息...</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);">第一次请求可能较慢，请耐心等待</p>
+      </div>
+
+      <!-- 错误提示 -->
+      <div id="errorArea" style="display:none;"></div>
+
+      <!-- 视频预览 -->
+      <div class="video-preview" id="videoPreview" style="display:none;">
+        <img class="thumb" id="videoThumb" src="" alt="缩略图">
+        <div class="info">
+          <h3 id="videoTitle"></h3>
+          <div class="meta">
+            <span>⏱ <span id="videoDuration"></span></span>
+            <span>👤 <span id="videoUploader"></span></span>
+            <span>👁 <span id="videoViews"></span></span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="fetchFormats()" id="btnFormats" style="margin-top:8px;">📋 获取下载格式</button>
+        </div>
+      </div>
+
+      <!-- 格式选择 -->
+      <div id="formatsArea" style="display:none;margin-top:20px;">
+        <div id="videoFormatsSection" style="margin-bottom:16px;">
+          <h4 style="margin-bottom:8px;">🎬 视频格式 (带声音)</h4>
+          <div class="format-grid" id="videoFormatsGrid"></div>
+        </div>
+        <div id="audioFormatsSection">
+          <h4 style="margin-bottom:8px;">🎵 纯音频格式</h4>
+          <div class="format-grid" id="audioFormatsGrid"></div>
+        </div>
+
+        <!-- 下载按钮 -->
+        <div style="text-align:center;margin-top:20px;">
+          <button class="btn btn-success" id="btnDownload" onclick="startDownload()" style="font-size:1.1rem;padding:14px 48px;" disabled>📥 请先选择格式</button>
+        </div>
+
+        <!-- 进度 -->
+        <div class="progress-wrap" id="progressWrap">
+          <p style="font-size:0.85rem;margin-bottom:4px;">⏳ 正在下载，请耐心等待（大文件可能需要几分钟）...</p>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <p class="progress-text" id="progressText">准备中...</p>
+        </div>
+      </div>
+
+      <!-- 提示 -->
+      <div class="notice-box">
+        ⚠️ <strong>免责声明：</strong>本工具仅供学习和研究使用。请仅下载您拥有版权或获得授权的内容（如自己的视频、Creative Commons 许可内容）。下载他人版权视频可能违反 YouTube 服务条款和相关法律。使用者需自行承担法律责任。
+      </div>
+
+      <!-- 服务器配置 -->
+      <div class="server-config">
+        <h4>🔧 后端服务配置</h4>
+        <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:8px;">
+          此工具需要运行后端服务才能使用。在你的电脑或服务器上启动：<br>
+          <code style="background:var(--bg);padding:2px 6px;border-radius:3px;">python server.py --host 0.0.0.0 --port 8800</code>
+        </p>
+        <div class="input-row">
+          <label style="white-space:nowrap;font-size:0.8rem;">API 地址:</label>
+          <input type="text" id="apiBase" value="http://127.0.0.1:8800" onchange="saveApiConfig()">
+          <button class="btn btn-secondary btn-sm" onclick="saveApiConfig();testConnection();">🔗 测试连接</button>
+          <span id="connStatus" style="font-size:0.78rem;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com · <span style="cursor:pointer;color:var(--primary);" onclick="alert('微信: Pwwdb-520\n邮箱: 455074219@qq.com\n\n网站开发 | 小程序 | AI工具 | 代写代码')">💬 联系我</span></p></div></footer>
+  <div class="copy-toast" id="copyToast">✅ 已复制</div>
+  <script src="../js/main.js"></script>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+
+    // ========== API 配置 ==========
+    let API_BASE = localStorage.getItem('yt_api_base') || 'http://127.0.0.1:8800';
+    document.getElementById('apiBase').value = API_BASE;
+
+    function saveApiConfig() {
+      API_BASE = document.getElementById('apiBase').value.replace(/\/+$/, '');
+      localStorage.setItem('yt_api_base', API_BASE);
+    }
+
+    async function testConnection() {
+      const status = document.getElementById('connStatus');
+      status.textContent = '⏳ 测试中...';
+      status.style.color = '';
+      try {
+        const resp = await fetch(API_BASE + '/', { signal: AbortSignal.timeout(5000) });
+        const data = await resp.json();
+        status.textContent = '✅ 连接成功';
+        status.style.color = 'var(--success)';
+      } catch(e) {
+        status.textContent = '❌ 无法连接 (' + e.message + ')';
+        status.style.color = 'var(--danger)';
+      }
+    }
+
+    // ========== 状态 ==========
+    let selectedFormat = null;
+    let selectedFormatType = null; // 'video' | 'audio'
+
+    // ========== 获取视频信息 ==========
+    async function fetchInfo() {
+      const url = document.getElementById('videoUrl').value.trim();
+      if (!url) { showError('请先粘贴 YouTube 视频链接'); return; }
+
+      if (!url.includes('youtube.com/watch') && !url.includes('youtu.be/')) {
+        showError('请输入有效的 YouTube 链接 (youtube.com/watch?v= 或 youtu.be/)');
+        return;
+      }
+
+      document.getElementById('loadingArea').style.display = 'block';
+      document.getElementById('errorArea').style.display = 'none';
+      document.getElementById('videoPreview').style.display = 'none';
+      document.getElementById('formatsArea').style.display = 'none';
+
+      try {
+        const resp = await fetch(API_BASE + '/api/info?url=' + encodeURIComponent(url), {
+          signal: AbortSignal.timeout(60000)
+        });
+        const data = await resp.json();
+
+        if (data.error) { showError(data.error); return; }
+
+        document.getElementById('videoThumb').src = data.thumbnail;
+        document.getElementById('videoTitle').textContent = data.title;
+        document.getElementById('videoDuration').textContent = data.duration_str;
+        document.getElementById('videoUploader').textContent = data.uploader;
+        document.getElementById('videoViews').textContent = data.view_count ? parseInt(data.view_count).toLocaleString() + ' 次观看' : '';
+
+        document.getElementById('loadingArea').style.display = 'none';
+        document.getElementById('videoPreview').style.display = 'flex';
+
+        // 自动获取格式
+        await fetchFormats();
+      } catch(e) {
+        showError('请求失败: ' + e.message + '<br><br>请确认后端服务已启动。<br>在 youtube-backend 目录运行: <code>python server.py --host 0.0.0.0 --port 8800</code>');
+      }
+    }
+
+    async function fetchFormats() {
+      const url = document.getElementById('videoUrl').value.trim();
+      if (!url) return;
+
+      document.getElementById('loadingArea').style.display = 'block';
+      document.getElementById('formatsArea').style.display = 'none';
+      document.getElementById('errorArea').style.display = 'none';
+      selectedFormat = null;
+      document.getElementById('btnDownload').textContent = '📥 请先选择格式';
+      document.getElementById('btnDownload').disabled = true;
+
+      try {
+        const resp = await fetch(API_BASE + '/api/formats?url=' + encodeURIComponent(url), {
+          signal: AbortSignal.timeout(60000)
+        });
+        const data = await resp.json();
+
+        if (data.error) { showError(data.error); return; }
+
+        document.getElementById('loadingArea').style.display = 'none';
+        document.getElementById('videoPreview').style.display = 'flex';
+        document.getElementById('formatsArea').style.display = 'block';
+        document.getElementById('progressWrap').style.display = 'none';
+
+        // 渲染视频格式
+        const vg = document.getElementById('videoFormatsGrid');
+        vg.innerHTML = '';
+        if (data.video_formats && data.video_formats.length > 0) {
+          data.video_formats.forEach(f => {
+            if (!f.filesize_str || f.filesize_str === '未知') return; // 跳过无大小信息的
+            vg.appendChild(createFormatCard(f, 'video'));
+          });
+        }
+
+        // 如果没有单独的视频格式，添加一个默认的"最佳质量"
+        if (vg.children.length === 0) {
+          vg.innerHTML = `
+            <div class="format-card selected" onclick="selectFormat(this, 'bestvideo+bestaudio/best', 'video')" data-format="bestvideo+bestaudio/best" data-type="video" style="grid-column:1/-1;">
+              <div class="quality">🎬 最佳质量 (推荐)</div>
+              <div class="details">自动选择最佳视频+音频</div>
+              <div class="size">合并为 MP4</div>
+            </div>
+          `;
+          selectedFormat = 'bestvideo+bestaudio/best';
+          selectedFormatType = 'video';
+          document.getElementById('btnDownload').textContent = '📥 下载视频 (最佳质量)';
+          document.getElementById('btnDownload').disabled = false;
+        }
+
+        // 渲染音频格式
+        const ag = document.getElementById('audioFormatsGrid');
+        ag.innerHTML = '';
+        if (data.audio_formats && data.audio_formats.length > 0) {
+          const shown = new Set();
+          data.audio_formats.forEach(f => {
+            const key = f.ext + '_' + (f.tbr || '0');
+            if (shown.has(key)) return;
+            shown.add(key);
+            ag.appendChild(createFormatCard(f, 'audio'));
+          });
+        }
+
+        // 添加"提取音频"默认选项
+        const audioCard = document.createElement('div');
+        audioCard.className = 'format-card';
+        audioCard.onclick = function() { selectFormat(this, 'bestaudio/best', 'audio'); };
+        audioCard.setAttribute('data-format', 'bestaudio/best');
+        audioCard.setAttribute('data-type', 'audio');
+        audioCard.innerHTML = `
+          <div class="quality">🎵 提取 MP3</div>
+          <div class="details">自动提取最佳音质</div>
+          <div class="size">输出 MP3 (192kbps)</div>
+        `;
+        ag.appendChild(audioCard);
+
+        document.getElementById('videoFormatsSection').style.display = vg.children.length > 0 ? 'block' : 'none';
+        document.getElementById('audioFormatsSection').style.display = 'block';
+
+      } catch(e) {
+        showError('获取格式失败: ' + e.message + '<br><br>请确认后端服务已启动。');
+      }
+    }
+
+    function createFormatCard(f, type) {
+      const card = document.createElement('div');
+      card.className = 'format-card';
+      card.onclick = function() { selectFormat(this, f.format_id, type); };
+      card.setAttribute('data-format', f.format_id);
+      card.setAttribute('data-type', type);
+
+      let qualityLabel = f.resolution || f.ext.toUpperCase();
+      if (f.fps && f.fps > 30) qualityLabel += ' ' + f.fps + 'fps';
+      if (type === 'audio') qualityLabel = f.ext.toUpperCase() + ' 音频';
+
+      card.innerHTML = `
+        <div class="quality">${type === 'video' ? '🎬' : '🎵'} ${qualityLabel}</div>
+        <div class="details">${type === 'video' ? (f.vcodec || '') + ' · ' + (f.acodec || '') : f.acodec || 'audio'}</div>
+        <div class="size">📦 ${f.filesize_str || '未知大小'}</div>
+      `;
+
+      return card;
+    }
+
+    function selectFormat(cardElement, formatId, type) {
+      // 移除所有选中
+      document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
+      cardElement.classList.add('selected');
+      selectedFormat = formatId;
+      selectedFormatType = type;
+
+      const label = type === 'video' ? '下载视频' : '下载音频 (MP3)';
+      document.getElementById('btnDownload').textContent = '📥 ' + label;
+      document.getElementById('btnDownload').disabled = false;
+    }
+
+    // ========== 下载 ==========
+    async function startDownload() {
+      if (!selectedFormat) {
+        alert('请先选择下载格式');
+        return;
+      }
+
+      const url = document.getElementById('videoUrl').value.trim();
+      const btn = document.getElementById('btnDownload');
+      const progWrap = document.getElementById('progressWrap');
+      const progFill = document.getElementById('progressFill');
+      const progText = document.getElementById('progressText');
+
+      btn.disabled = true;
+      btn.textContent = '⏳ 正在准备下载...';
+      progWrap.style.display = 'block';
+      progFill.style.width = '0%';
+
+      try {
+        const downloadUrl = API_BASE + '/api/download?url=' + encodeURIComponent(url) + '&format=' + encodeURIComponent(selectedFormat);
+
+        progText.textContent = '正在连接服务器...';
+        progFill.style.width = '10%';
+
+        const resp = await fetch(downloadUrl, { signal: AbortSignal.timeout(600000) }); // 10分钟超时
+
+        if (!resp.ok) {
+          const errData = await resp.json().catch(() => ({ error: 'HTTP ' + resp.status }));
+          showError(errData.error || '下载失败');
+          btn.disabled = false;
+          btn.textContent = '📥 重试下载';
+          progWrap.style.display = 'none';
+          return;
+        }
+
+        // 读取为 blob 并显示进度
+        const contentLength = resp.headers.get('Content-Length');
+        const total = contentLength ? parseInt(contentLength) : 0;
+        const reader = resp.body.getReader();
+        const chunks = [];
+        let received = 0;
+
+        progText.textContent = total > 0 ? '下载中... (0/' + formatBytes(total) + ')' : '下载中...';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          received += value.length;
+
+          if (total > 0) {
+            const pct = Math.round((received / total) * 100);
+            progFill.style.width = pct + '%';
+            progText.textContent = '下载中... (' + formatBytes(received) + ' / ' + formatBytes(total) + ')';
+          } else {
+            progFill.style.width = '50%';
+            progText.textContent = '下载中... (' + formatBytes(received) + ')';
+          }
+        }
+
+        progFill.style.width = '100%';
+        progText.textContent = '✅ 下载完成！正在保存...';
+
+        // 创建下载链接
+        const blob = new Blob(chunks);
+        const contentDisposition = resp.headers.get('Content-Disposition') || '';
+        let filename = 'video.mp4';
+        const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        if (match) filename = match[1].replace(/['"]/g, '');
+
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+
+        progText.textContent = '✅ 下载完成！文件: ' + filename + ' (' + formatBytes(received) + ')';
+        btn.textContent = '✅ 下载完成';
+        btn.disabled = false;
+
+      } catch(e) {
+        if (e.name === 'AbortError') {
+          showError('下载超时（超过10分钟）。请尝试选择较小的格式。');
+        } else {
+          showError('下载失败: ' + e.message);
+        }
+        btn.disabled = false;
+        btn.textContent = '📥 重试下载';
+        progWrap.style.display = 'none';
+      }
+    }
+
+    // ========== 工具函数 ==========
+    function showError(msg) {
+      document.getElementById('loadingArea').style.display = 'none';
+      document.getElementById('videoPreview').style.display = 'none';
+      document.getElementById('formatsArea').style.display = 'none';
+      const err = document.getElementById('errorArea');
+      err.style.display = 'block';
+      err.innerHTML = '<div style="background:var(--danger);color:#fff;padding:16px;border-radius:var(--radius-sm);">' + msg + '</div>';
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // 回车键触发解析
+    document.getElementById('videoUrl').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') fetchInfo();
+    });
+
+    // 页面加载时测试连接
+    window.addEventListener('load', function() { saveApiConfig(); });
+  </script>
+</body>
+</html>
