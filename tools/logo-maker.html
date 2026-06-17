@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线LOGO制作器 - 免费设计LOGO</title>
+  <meta name="description" content="免费在线LOGO制作器，支持文字、形状、图标、图片混排，拖拽编辑，高清导出PNG/SVG，无需注册。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/logo-maker.html">
+  <meta property="og:title" content="在线LOGO制作器 - 免费设计LOGO">
+  <meta property="og:description" content="免费在线LOGO制作器，文字+形状+图标+图片混排，拖拽编辑，高清导出。">
+  <meta property="og:url" content="https://pwwdb.com/tools/logo-maker.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "在线LOGO制作器",
+    "url": "https://pwwdb.com/tools/logo-maker.html",
+    "description": "免费在线LOGO制作器，文字、形状、图标、图片混排，拖拽编辑，高清导出。",
+    "applicationCategory": "Design",
+    "operatingSystem": "All"
+  }
+  </script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <!-- 百度统计 -->
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <style>
+    .logo-maker-layout { display:flex; gap:16px; min-height:70vh; flex-wrap:wrap; }
+    .logo-sidebar { width:240px; min-width:220px; flex-shrink:0; display:flex; flex-direction:column; gap:8px; }
+    .logo-canvas-wrap { flex:1; min-width:500px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+    .logo-canvas-wrap canvas { max-width:100%; max-height:100%; }
+    .logo-props { width:260px; min-width:220px; flex-shrink:0; display:flex; flex-direction:column; gap:8px; }
+    .sidebar-section { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; }
+    .sidebar-section h4 { font-size:0.85rem; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; }
+    .tool-btn { display:flex; align-items:center; gap:6px; width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); cursor:pointer; font-size:0.82rem; font-family:inherit; transition:all var(--transition); text-align:left; }
+    .tool-btn:hover { border-color:var(--primary); background:var(--primary-light); }
+    .tool-btn.active { border-color:var(--primary); background:var(--primary); color:#fff; }
+    .tool-btn .icon { font-size:1.1rem; width:22px; text-align:center; flex-shrink:0; }
+    .tool-btn-sm { padding:5px 10px; font-size:0.75rem; width:auto; display:inline-flex; }
+    .shape-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+    .shape-btn { padding:8px 4px; border:1px solid var(--border); border-radius:6px; background:var(--bg); cursor:pointer; font-size:0.7rem; text-align:center; transition:all var(--transition); color:var(--text); font-family:inherit; }
+    .shape-btn:hover { border-color:var(--primary); background:var(--primary-light); }
+    .shape-btn .sicon { font-size:1.3rem; display:block; margin-bottom:2px; }
+    .icon-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:3px; max-height:200px; overflow-y:auto; }
+    .icon-btn { padding:6px; border:1px solid var(--border); border-radius:4px; background:var(--bg); cursor:pointer; font-size:1.3rem; text-align:center; transition:all var(--transition); }
+    .icon-btn:hover { border-color:var(--primary); background:var(--primary-light); transform:scale(1.1); }
+    .layer-item { display:flex; align-items:center; gap:6px; padding:6px 8px; border:1px solid var(--border); border-radius:6px; margin-bottom:4px; cursor:pointer; font-size:0.78rem; transition:all var(--transition); background:var(--bg); }
+    .layer-item:hover { border-color:var(--primary); }
+    .layer-item.selected { border-color:var(--primary); background:var(--primary-light); }
+    .layer-item .layer-icon { width:24px; text-align:center; flex-shrink:0; }
+    .layer-item .layer-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .layer-item .layer-actions { display:flex; gap:2px; }
+    .layer-item .layer-actions button { width:22px; height:22px; border:1px solid var(--border); border-radius:4px; background:var(--bg); cursor:pointer; font-size:0.65rem; padding:0; line-height:1; }
+    .layer-item .layer-actions button:hover { background:var(--danger); color:#fff; border-color:var(--danger); }
+    .color-input-group { display:flex; gap:6px; align-items:center; }
+    .color-input-group input[type="color"] { width:32px; height:32px; border:1px solid var(--border); border-radius:4px; cursor:pointer; padding:2px; }
+    .color-input-group input[type="text"] { flex:1; }
+    .canvas-toolbar { position:absolute; top:8px; left:8px; display:flex; gap:4px; z-index:10; }
+    .canvas-toolbar button { padding:6px 10px; border:1px solid var(--border); border-radius:6px; background:var(--bg-card); cursor:pointer; font-size:0.75rem; transition:all var(--transition); color:var(--text); font-family:inherit; }
+    .canvas-toolbar button:hover { border-color:var(--primary); background:var(--primary-light); }
+    .canvas-size-indicator { position:absolute; bottom:8px; right:8px; font-size:0.7rem; color:var(--text-muted); background:var(--bg-card); padding:4px 8px; border-radius:4px; border:1px solid var(--border); }
+    #logoCanvasContainer { position:relative; display:inline-block; }
+    .upload-drop-zone { border:2px dashed var(--border); border-radius:8px; padding:20px; text-align:center; transition:all var(--transition); cursor:pointer; }
+    .upload-drop-zone:hover, .upload-drop-zone.dragover { border-color:var(--primary); background:var(--primary-light); }
+    .upload-drop-zone p { font-size:0.78rem; color:var(--text-muted); margin:0; }
+    .upload-drop-zone .big-icon { font-size:2rem; display:block; margin-bottom:4px; }
+    .range-group { display:flex; align-items:center; gap:8px; }
+    .range-group input[type="range"] { flex:1; }
+    .range-group span { font-size:0.75rem; color:var(--text-muted); min-width:36px; text-align:right; }
+    .export-options { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .export-options select, .export-options input { padding:6px 10px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); font-size:0.8rem; font-family:inherit; }
+    input[type="file"] { display:none; }
+
+    @media(max-width:1100px) {
+      .logo-maker-layout { flex-direction:column; }
+      .logo-sidebar { width:100%; flex-direction:row; flex-wrap:wrap; }
+      .logo-sidebar .sidebar-section { flex:1; min-width:150px; }
+      .logo-props { width:100%; flex-direction:row; flex-wrap:wrap; }
+      .logo-props .sidebar-section { flex:1; min-width:150px; }
+      .logo-canvas-wrap { min-width:auto; min-height:400px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo">
+        <span class="logo-icon">🔧</span>
+        <span>在线工具箱</span>
+      </a>
+      <div class="navbar-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-header">
+      <a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a>
+      <h1>🎨 LOGO 制作器</h1>
+      <p>文字 + 形状 + 图标 + 图片混排，拖拽编辑位置和大小，高清导出。最大支持 <strong>4096×4096</strong> 像素导出，上传图片无大小限制。</p>
+    </div>
+
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <!-- 顶部操作栏 -->
+      <div class="btn-group" style="margin-bottom:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="undo()" title="撤销 (Ctrl+Z)">↩ 撤销</button>
+        <button class="btn btn-secondary btn-sm" onclick="redo()" title="重做 (Ctrl+Shift+Z)">↪ 重做</button>
+        <button class="btn btn-secondary btn-sm" onclick="deleteSelected()" title="删除选中 (Delete)">🗑 删除</button>
+        <button class="btn btn-secondary btn-sm" onclick="bringForward()" title="上移一层">⬆ 上移</button>
+        <button class="btn btn-secondary btn-sm" onclick="sendBackward()" title="下移一层">⬇ 下移</button>
+        <button class="btn btn-secondary btn-sm" onclick="duplicateSelected()">📋 复制</button>
+        <button class="btn btn-secondary btn-sm" onclick="clearCanvas()" style="color:var(--danger);">🗑 清空画布</button>
+        <span style="margin-left:auto;font-size:0.8rem;color:var(--text-muted);">💡 点击画布上的元素可拖动/缩放</span>
+      </div>
+
+      <div class="logo-maker-layout">
+        <!-- 左侧工具栏 -->
+        <div class="logo-sidebar">
+          <!-- 添加文字 -->
+          <div class="sidebar-section">
+            <h4>🔤 添加文字</h4>
+            <div class="form-group" style="margin-bottom:6px;">
+              <input type="text" id="addTextInput" placeholder="输入文字内容..." style="width:100%;">
+            </div>
+            <button class="tool-btn" onclick="addText()"><span class="icon">➕</span>添加文字</button>
+            <div style="display:flex;gap:4px;margin-top:4px;">
+              <select id="fontFamily" style="flex:1;padding:4px;border:1px solid var(--border);border-radius:4px;font-size:0.75rem;background:var(--bg);color:var(--text);">
+                <option value="Arial">Arial</option>
+                <option value="PingFang SC,Microsoft YaHei,sans-serif">苹方/雅黑</option>
+                <option value="SimHei,sans-serif">黑体</option>
+                <option value="SimSun,serif">宋体</option>
+                <option value="KaiTi,serif">楷体</option>
+                <option value="Georgia,serif">Georgia</option>
+                <option value="Impact,sans-serif">Impact</option>
+                <option value="Courier New,monospace">Courier</option>
+              </select>
+              <button class="tool-btn tool-btn-sm" onclick="toggleBold()" id="boldBtn" style="width:auto;">B</button>
+              <button class="tool-btn tool-btn-sm" onclick="toggleItalic()" id="italicBtn" style="width:auto;"><i>I</i></button>
+            </div>
+          </div>
+
+          <!-- 形状 -->
+          <div class="sidebar-section">
+            <h4>🔷 形状</h4>
+            <div class="shape-grid">
+              <button class="shape-btn" onclick="addShape('rect')"><span class="sicon">⬜</span>矩形</button>
+              <button class="shape-btn" onclick="addShape('circle')"><span class="sicon">⭕</span>圆形</button>
+              <button class="shape-btn" onclick="addShape('triangle')"><span class="sicon">🔺</span>三角</button>
+              <button class="shape-btn" onclick="addShape('star')"><span class="sicon">⭐</span>五角星</button>
+              <button class="shape-btn" onclick="addShape('diamond')"><span class="sicon">💎</span>菱形</button>
+              <button class="shape-btn" onclick="addShape('hexagon')"><span class="sicon">⬡</span>六边</button>
+              <button class="shape-btn" onclick="addShape('line')"><span class="sicon">➖</span>直线</button>
+              <button class="shape-btn" onclick="addShape('arrow')"><span class="sicon">➡️</span>箭头</button>
+            </div>
+          </div>
+
+          <!-- 图标库 -->
+          <div class="sidebar-section">
+            <h4>🎯 快速图标</h4>
+            <div class="icon-grid" id="iconGrid">
+              <!-- populated by JS -->
+            </div>
+          </div>
+
+          <!-- 上传图片 -->
+          <div class="sidebar-section">
+            <h4>🖼️ 上传图片</h4>
+            <div class="upload-drop-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+              <span class="big-icon">📁</span>
+              <p>点击或拖拽图片到此处</p>
+              <p style="font-size:0.7rem;opacity:0.7;">支持 JPG/PNG/SVG/GIF/WebP<br>文件大小无限制</p>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(this)">
+          </div>
+        </div>
+
+        <!-- 中央画布 -->
+        <div class="logo-canvas-wrap" id="logoCanvasWrap">
+          <div id="logoCanvasContainer">
+            <canvas id="logoCanvas"></canvas>
+            <div class="canvas-size-indicator" id="canvasSizeIndicator">800 × 600</div>
+          </div>
+          <div class="canvas-toolbar">
+            <button onclick="zoomIn()" title="放大">🔍+</button>
+            <button onclick="zoomOut()" title="缩小">🔍−</button>
+            <button onclick="zoomFit()" title="适应屏幕">📐</button>
+            <button onclick="centerAll()" title="居中所有内容">🎯</button>
+          </div>
+        </div>
+
+        <!-- 右侧属性面板 -->
+        <div class="logo-props">
+          <!-- 选中元素属性 -->
+          <div class="sidebar-section" id="propsPanel">
+            <h4>📐 属性</h4>
+            <p id="noSelectionHint" style="font-size:0.78rem;color:var(--text-muted);text-align:center;padding:20px 0;">点击画布上的元素<br>查看和修改属性</p>
+            <div id="propsContent" style="display:none;">
+              <div class="form-group" style="margin-bottom:6px;">
+                <label>X / Y 位置</label>
+                <div style="display:flex;gap:4px;">
+                  <input type="number" id="propX" style="width:50%;" onchange="updateProp('left',this.value)">
+                  <input type="number" id="propY" style="width:50%;" onchange="updateProp('top',this.value)">
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:6px;">
+                <label>宽 / 高</label>
+                <div style="display:flex;gap:4px;">
+                  <input type="number" id="propW" style="width:50%;" onchange="updateProp('width',this.value)">
+                  <input type="number" id="propH" style="width:50%;" onchange="updateProp('height',this.value)">
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:6px;">
+                <label>旋转角度</label>
+                <div class="range-group">
+                  <input type="range" id="propAngle" min="0" max="360" value="0" oninput="updateProp('angle',this.value)">
+                  <span id="angleVal">0°</span>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:6px;">
+                <label>透明度</label>
+                <div class="range-group">
+                  <input type="range" id="propOpacity" min="0" max="100" value="100" oninput="updateProp('opacity',this.value/100)">
+                  <span id="opacityVal">100%</span>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:6px;">
+                <label>填充颜色</label>
+                <div class="color-input-group">
+                  <input type="color" id="propFill" onchange="updateProp('fill',this.value)">
+                  <input type="text" id="propFillText" placeholder="#000000" onchange="updateProp('fill',this.value)">
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:6px;">
+                <label>描边颜色</label>
+                <div class="color-input-group">
+                  <input type="color" id="propStroke" onchange="updateProp('stroke',this.value)">
+                  <input type="text" id="propStrokeText" placeholder="transparent" onchange="updateProp('stroke',this.value)">
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:6px;">
+                <label>描边宽度</label>
+                <input type="number" id="propStrokeWidth" min="0" max="50" value="0" onchange="updateProp('strokeWidth',this.value)">
+              </div>
+              <div class="form-group" style="margin-bottom:6px;" id="fontSizeGroup">
+                <label>字号</label>
+                <input type="number" id="propFontSize" min="8" max="500" value="40" onchange="updateProp('fontSize',this.value)">
+              </div>
+            </div>
+          </div>
+
+          <!-- 画布设置 -->
+          <div class="sidebar-section">
+            <h4>🖼️ 画布设置</h4>
+            <div class="form-group" style="margin-bottom:6px;">
+              <label>画布尺寸</label>
+              <div style="display:flex;gap:4px;">
+                <input type="number" id="canvasWidth" value="800" min="100" max="4096" style="width:50%;" onchange="resizeCanvas()">
+                <input type="number" id="canvasHeight" value="600" min="100" max="4096" style="width:50%;" onchange="resizeCanvas()">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:6px;">
+              <label>背景颜色</label>
+              <div class="color-input-group">
+                <input type="color" id="canvasBgColor" value="#ffffff" onchange="changeCanvasBg()">
+                <input type="text" id="canvasBgText" value="#ffffff" onchange="document.getElementById('canvasBgColor').value=this.value;changeCanvasBg();">
+              </div>
+            </div>
+          </div>
+
+          <!-- 图层列表 -->
+          <div class="sidebar-section">
+            <h4>📑 图层 (<span id="layerCount">0</span>)</h4>
+            <div id="layerList" style="max-height:250px;overflow-y:auto;">
+              <p style="font-size:0.75rem;color:var(--text-muted);text-align:center;padding:10px;">暂无元素</p>
+            </div>
+          </div>
+
+          <!-- 导出 -->
+          <div class="sidebar-section">
+            <h4>📥 导出</h4>
+            <div class="form-group" style="margin-bottom:6px;">
+              <label>导出格式</label>
+              <select id="exportFormat" onchange="toggleExportOptions()">
+                <option value="png">PNG 图片</option>
+                <option value="svg">SVG 矢量</option>
+                <option value="jpg">JPG 图片</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:6px;" id="exportScaleGroup">
+              <label>导出倍率 (越大越清晰)</label>
+              <select id="exportScale">
+                <option value="1">1× (800×600)</option>
+                <option value="2" selected>2× (1600×1200) 推荐</option>
+                <option value="3">3× (2400×1800)</option>
+                <option value="4">4× (3200×2400)</option>
+                <option value="5">5× (4000×3000)</option>
+                <option value="0">自定义尺寸↓</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:6px;display:none;" id="exportCustomSize">
+              <label>自定义导出尺寸</label>
+              <div style="display:flex;gap:4px;">
+                <input type="number" id="exportCustomW" placeholder="宽" min="100" max="4096" style="width:50%;">
+                <input type="number" id="exportCustomH" placeholder="高" min="100" max="4096" style="width:50%;">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:8px;" id="exportQualityGroup">
+              <label>画质</label>
+              <div class="range-group">
+                <input type="range" id="exportQuality" min="50" max="100" value="100" oninput="document.getElementById('qualityVal').textContent=this.value+'%'">
+                <span id="qualityVal">100%</span>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;" onclick="exportLogo()">📥 导出LOGO</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-container" style="margin-top:16px;">📢 广告位招租</div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com · <span style="cursor:pointer;color:var(--primary);" onclick="alert('微信: Pwwdb-520\n邮箱: 455074219@qq.com\n\n网站开发 | 小程序 | AI工具 | 代写代码')">💬 联系我</span></p></div></footer>
+  <div class="copy-toast" id="copyToast">✅ 已复制</div>
+  <script src="../js/main.js"></script>
+  <script>
+    // ========== 初始化 ==========
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+
+    const canvas = new fabric.Canvas('logoCanvas', {
+      width: 800,
+      height: 600,
+      backgroundColor: '#ffffff',
+      preserveObjectStacking: true,
+      selection: true
+    });
+
+    const CANVAS_MAX = 4096;
+    let undoStack = [];
+    let redoStack = [];
+    const MAX_HISTORY = 50;
+
+    function saveState() {
+      const state = JSON.stringify(canvas.toJSON());
+      undoStack.push(state);
+      if (undoStack.length > MAX_HISTORY) undoStack.shift();
+      redoStack = [];
+    }
+
+    function undo() {
+      if (undoStack.length === 0) return;
+      redoStack.push(JSON.stringify(canvas.toJSON()));
+      canvas.loadFromJSON(JSON.parse(undoStack.pop()), () => {
+        canvas.renderAll();
+        updateLayers();
+      });
+    }
+
+    function redo() {
+      if (redoStack.length === 0) return;
+      undoStack.push(JSON.stringify(canvas.toJSON()));
+      canvas.loadFromJSON(JSON.parse(redoStack.pop()), () => {
+        canvas.renderAll();
+        updateLayers();
+      });
+    }
+
+    // 保存初始状态
+    saveState();
+
+    // ========== 事件监听 ==========
+    canvas.on('object:modified', function(e) {
+      saveState();
+      updateLayers();
+      if (canvas.getActiveObject()) showProps(canvas.getActiveObject());
+    });
+
+    canvas.on('object:added', function(e) {
+      if (!e.target.__restoring) {
+        saveState();
+        updateLayers();
+      }
+    });
+
+    canvas.on('selection:created', function(e) { showProps(e.selected[0]); });
+    canvas.on('selection:updated', function(e) { showProps(e.selected[0]); });
+    canvas.on('selection:cleared', function() { hideProps(); });
+    canvas.on('object:removed', function() { saveState(); updateLayers(); hideProps(); });
+
+    // 键盘快捷键
+    document.addEventListener('keydown', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+      if (e.ctrlKey && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+      if (e.ctrlKey && e.key === 'z' && e.shiftKey) { e.preventDefault(); redo(); }
+      if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+      if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSelected(); }
+    });
+
+    // ========== 文字 ==========
+    function addText() {
+      const text = document.getElementById('addTextInput').value || '输入文字';
+      const font = document.getElementById('fontFamily').value;
+      const txt = new fabric.IText(text, {
+        left: 100, top: 100,
+        fontFamily: font,
+        fontSize: 48,
+        fill: '#1e293b',
+        fontWeight: 'normal',
+        fontStyle: 'normal',
+        editable: true
+      });
+      canvas.add(txt);
+      canvas.setActiveObject(txt);
+      canvas.renderAll();
+      saveState();
+      updateLayers();
+    }
+
+    function toggleBold() {
+      const obj = canvas.getActiveObject();
+      if (obj && obj.type === 'i-text') {
+        obj.set('fontWeight', obj.fontWeight === 'bold' ? 'normal' : 'bold');
+        canvas.renderAll();
+        saveState();
+      }
+    }
+
+    function toggleItalic() {
+      const obj = canvas.getActiveObject();
+      if (obj && obj.type === 'i-text') {
+        obj.set('fontStyle', obj.fontStyle === 'italic' ? 'normal' : 'italic');
+        canvas.renderAll();
+        saveState();
+      }
+    }
+
+    // ========== 形状 ==========
+    function addShape(type) {
+      const common = { left: 150, top: 150, fill: '#4f46e5', stroke: null, strokeWidth: 0 };
+      let shape;
+      switch(type) {
+        case 'rect': shape = new fabric.Rect({...common, width: 150, height: 100, rx: 8, ry: 8 }); break;
+        case 'circle': shape = new fabric.Circle({...common, radius: 70 }); break;
+        case 'triangle': shape = new fabric.Triangle({...common, width: 140, height: 120 }); break;
+        case 'star':
+          shape = new fabric.Polygon([
+            {x: 0, y: -70}, {x: 20, y: -22}, {x: 70, y: -22},
+            {x: 32, y: 10}, {x: 44, y: 58}, {x: 0, y: 30},
+            {x: -44, y: 58}, {x: -32, y: 10}, {x: -70, y: -22}, {x: -20, y: -22}
+          ], {...common, left: 200, top: 200 });
+          break;
+        case 'diamond':
+          shape = new fabric.Polygon([
+            {x: 0, y: -60}, {x: 60, y: 0}, {x: 0, y: 60}, {x: -60, y: 0}
+          ], {...common, left: 200, top: 200 });
+          break;
+        case 'hexagon':
+          const pts6 = [];
+          for (let i = 0; i < 6; i++) {
+            const angle = (Math.PI / 3) * i - Math.PI / 6;
+            pts6.push({x: 60 * Math.cos(angle), y: 60 * Math.sin(angle)});
+          }
+          shape = new fabric.Polygon(pts6, {...common, left: 200, top: 200 });
+          break;
+        case 'line': shape = new fabric.Line([50, 0, 250, 0], { left: 150, top: 200, stroke: '#1e293b', strokeWidth: 4 }); break;
+        case 'arrow':
+          const arrowPts = [{x: 0, y: 0}, {x: 120, y: 0}, {x: 120, y: -12}, {x: 160, y: 8}, {x: 120, y: 28}, {x: 120, y: 16}, {x: 0, y: 16}];
+          shape = new fabric.Polygon(arrowPts, { left: 150, top: 200, fill: '#4f46e5' });
+          break;
+      }
+      if (shape) {
+        canvas.add(shape);
+        canvas.setActiveObject(shape);
+        canvas.renderAll();
+        saveState();
+        updateLayers();
+      }
+    }
+
+    // ========== 图标库 ==========
+    const ICONS = ['🏠','💰','🚀','⭐','🔥','💡','❤️','👍','🎉','✨','🌟','💎','🔔','📌','🎯','🏆','🌍','📱','💻','🛒','🎨','🎵','📷','✈️','☕','🍕','🌈','🌸','🌻','🐼','🦊','🐧','🔑','⚙️','📦','🔒','📊','📈','🧠','🤖','👑','💪','🎓','🏃','🌿','🍀','💧','🔥','📝','🗺️','🕐','💬'];
+
+    (function() {
+      const grid = document.getElementById('iconGrid');
+      ICONS.forEach(icon => {
+        const btn = document.createElement('button');
+        btn.className = 'icon-btn';
+        btn.textContent = icon;
+        btn.title = icon;
+        btn.onclick = function() { addIcon(icon); };
+        grid.appendChild(btn);
+      });
+    })();
+
+    function addIcon(emoji) {
+      const txt = new fabric.IText(emoji, {
+        left: 200, top: 200,
+        fontSize: 80,
+        fontFamily: 'Arial',
+        fill: '#1e293b',
+        editable: false
+      });
+      canvas.add(txt);
+      canvas.setActiveObject(txt);
+      canvas.renderAll();
+      saveState();
+      updateLayers();
+    }
+
+    // ========== 图片上传 ==========
+    function handleFileUpload(input) {
+      const files = input.files;
+      if (!files || files.length === 0) return;
+      Array.from(files).forEach(file => {
+        // 无文件大小限制
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          fabric.Image.fromURL(e.target.result, function(img) {
+            // 缩放大图以适应画布
+            const maxDim = Math.max(canvas.width, canvas.height) * 0.8;
+            const scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
+            img.set({
+              left: canvas.width / 2 - (img.width * scale) / 2,
+              top: canvas.height / 2 - (img.height * scale) / 2,
+              scaleX: scale,
+              scaleY: scale
+            });
+            canvas.add(img);
+            canvas.setActiveObject(img);
+            canvas.renderAll();
+            saveState();
+            updateLayers();
+          }, {crossOrigin: 'anonymous'});
+        };
+        reader.readAsDataURL(file);
+      });
+      input.value = '';
+    }
+
+    // 拖拽上传
+    (function() {
+      const zone = document.getElementById('uploadZone');
+      const wrap = document.getElementById('logoCanvasWrap');
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        zone.addEventListener(evt, function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+        wrap.addEventListener(evt, function(e) { e.preventDefault(); });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        zone.addEventListener(evt, function(e) { e.preventDefault(); zone.classList.remove('dragover'); });
+        wrap.addEventListener(evt, function(e) { e.preventDefault(); });
+      });
+
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const dt = new DataTransfer();
+          Array.from(files).forEach(f => { if (f.type.startsWith('image/')) dt.items.add(f); });
+          const input = document.getElementById('fileInput');
+          input.files = dt.files;
+          handleFileUpload(input);
+        }
+      });
+
+      // 画布区域也支持拖入
+      wrap.addEventListener('drop', function(e) {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const dt = new DataTransfer();
+          Array.from(files).forEach(f => { if (f.type.startsWith('image/')) dt.items.add(f); });
+          const input = document.getElementById('fileInput');
+          input.files = dt.files;
+          handleFileUpload(input);
+        }
+      });
+    })();
+
+    // ========== 选中元素管理 ==========
+    function deleteSelected() {
+      const obj = canvas.getActiveObject();
+      if (!obj) return;
+      canvas.remove(obj);
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      saveState();
+      updateLayers();
+      hideProps();
+    }
+
+    function bringForward() {
+      const obj = canvas.getActiveObject();
+      if (!obj) return;
+      canvas.bringForward(obj);
+      canvas.renderAll();
+      saveState();
+      updateLayers();
+    }
+
+    function sendBackward() {
+      const obj = canvas.getActiveObject();
+      if (!obj) return;
+      canvas.sendBackwards(obj);
+      canvas.renderAll();
+      saveState();
+      updateLayers();
+    }
+
+    function duplicateSelected() {
+      const obj = canvas.getActiveObject();
+      if (!obj) return;
+      obj.clone(function(cloned) {
+        cloned.set({ left: cloned.left + 30, top: cloned.top + 30 });
+        canvas.add(cloned);
+        canvas.setActiveObject(cloned);
+        canvas.renderAll();
+        saveState();
+        updateLayers();
+      });
+    }
+
+    function clearCanvas() {
+      if (!confirm('确定要清空画布吗？此操作不可撤销。')) return;
+      canvas.clear();
+      canvas.backgroundColor = document.getElementById('canvasBgColor').value;
+      canvas.renderAll();
+      saveState();
+      updateLayers();
+      hideProps();
+    }
+
+    // ========== 属性面板 ==========
+    function showProps(obj) {
+      document.getElementById('noSelectionHint').style.display = 'none';
+      document.getElementById('propsContent').style.display = 'block';
+      document.getElementById('propX').value = Math.round(obj.left);
+      document.getElementById('propY').value = Math.round(obj.top);
+      document.getElementById('propW').value = Math.round(obj.width * (obj.scaleX || 1));
+      document.getElementById('propH').value = Math.round(obj.height * (obj.scaleY || 1));
+      document.getElementById('propAngle').value = obj.angle || 0;
+      document.getElementById('angleVal').textContent = (obj.angle || 0) + '°';
+      document.getElementById('propOpacity').value = Math.round((obj.opacity || 1) * 100);
+      document.getElementById('opacityVal').textContent = Math.round((obj.opacity || 1) * 100) + '%';
+      document.getElementById('propFill').value = obj.fill || '#000000';
+      document.getElementById('propFillText').value = obj.fill || '#000000';
+      document.getElementById('propStroke').value = obj.stroke || '#000000';
+      document.getElementById('propStrokeText').value = obj.stroke || '';
+      document.getElementById('propStrokeWidth').value = obj.strokeWidth || 0;
+      document.getElementById('fontSizeGroup').style.display = (obj.type === 'i-text' || obj.type === 'text') ? 'block' : 'none';
+      if (obj.type === 'i-text' || obj.type === 'text') {
+        document.getElementById('propFontSize').value = obj.fontSize || 40;
+      }
+    }
+
+    function hideProps() {
+      document.getElementById('noSelectionHint').style.display = 'block';
+      document.getElementById('propsContent').style.display = 'none';
+    }
+
+    function updateProp(prop, value) {
+      const obj = canvas.getActiveObject();
+      if (!obj) return;
+      switch(prop) {
+        case 'left': obj.set('left', parseFloat(value)); break;
+        case 'top': obj.set('top', parseFloat(value)); break;
+        case 'width':
+          obj.set('scaleX', parseFloat(value) / obj.width);
+          break;
+        case 'height':
+          obj.set('scaleY', parseFloat(value) / obj.height);
+          break;
+        case 'angle':
+          obj.set('angle', parseFloat(value));
+          document.getElementById('angleVal').textContent = parseFloat(value) + '°';
+          break;
+        case 'opacity':
+          obj.set('opacity', parseFloat(value));
+          document.getElementById('opacityVal').textContent = Math.round(parseFloat(value) * 100) + '%';
+          break;
+        case 'fill':
+          obj.set('fill', value);
+          document.getElementById('propFill').value = value;
+          document.getElementById('propFillText').value = value;
+          break;
+        case 'stroke':
+          obj.set('stroke', value);
+          document.getElementById('propStroke').value = value;
+          document.getElementById('propStrokeText').value = value;
+          break;
+        case 'strokeWidth':
+          obj.set('strokeWidth', parseFloat(value));
+          break;
+        case 'fontSize':
+          if (obj.type === 'i-text' || obj.type === 'text') obj.set('fontSize', parseFloat(value));
+          break;
+      }
+      canvas.renderAll();
+      saveState();
+    }
+
+    // ========== 图层面板 ==========
+    function updateLayers() {
+      const list = document.getElementById('layerList');
+      const count = document.getElementById('layerCount');
+      const objs = canvas.getObjects();
+      count.textContent = objs.length;
+
+      if (objs.length === 0) {
+        list.innerHTML = '<p style="font-size:0.75rem;color:var(--text-muted);text-align:center;padding:10px;">暂无元素</p>';
+        return;
+      }
+
+      // 从顶层到底层显示（canvas objects 索引越高越靠上）
+      list.innerHTML = '';
+      for (let i = objs.length - 1; i >= 0; i--) {
+        const obj = objs[i];
+        let icon = '🖼️';
+        let name = '';
+        if (obj.type === 'i-text' || obj.type === 'text') {
+          icon = '🔤';
+          name = (obj.text || '').substring(0, 15);
+          if (!name) name = '文字';
+        } else if (obj.type === 'image') {
+          icon = '🖼️';
+          name = '图片';
+        } else if (obj.type === 'rect') { icon = '⬜'; name = '矩形'; }
+        else if (obj.type === 'circle') { icon = '⭕'; name = '圆形'; }
+        else if (obj.type === 'triangle') { icon = '🔺'; name = '三角'; }
+        else if (obj.type === 'polygon') { icon = '🔷'; name = '多边形'; }
+        else if (obj.type === 'line') { icon = '➖'; name = '线条'; }
+        else { icon = '📐'; name = obj.type || '元素'; }
+
+        const item = document.createElement('div');
+        item.className = 'layer-item';
+        const activeObj = canvas.getActiveObject();
+        if (activeObj === obj) item.classList.add('selected');
+        item.innerHTML = `
+          <span class="layer-icon">${icon}</span>
+          <span class="layer-name" title="${name}">${name}</span>
+          <span class="layer-actions">
+            <button onclick="event.stopPropagation();selectLayer(${i})" title="选中">👁</button>
+            <button onclick="event.stopPropagation();deleteLayer(${i})" title="删除">✕</button>
+          </span>
+        `;
+        item.onclick = function() { selectLayer(i); };
+        list.appendChild(item);
+      }
+    }
+
+    function selectLayer(index) {
+      const obj = canvas.getObjects()[index];
+      if (obj) {
+        canvas.setActiveObject(obj);
+        canvas.renderAll();
+        showProps(obj);
+        updateLayers();
+      }
+    }
+
+    function deleteLayer(index) {
+      const obj = canvas.getObjects()[index];
+      if (obj) {
+        canvas.remove(obj);
+        canvas.renderAll();
+        saveState();
+        updateLayers();
+      }
+    }
+
+    // ========== 画布操作 ==========
+    function resizeCanvas() {
+      const w = Math.min(Math.max(parseInt(document.getElementById('canvasWidth').value) || 800, 100), CANVAS_MAX);
+      const h = Math.min(Math.max(parseInt(document.getElementById('canvasHeight').value) || 600, 100), CANVAS_MAX);
+      document.getElementById('canvasWidth').value = w;
+      document.getElementById('canvasHeight').value = h;
+      canvas.setWidth(w);
+      canvas.setHeight(h);
+      canvas.renderAll();
+      document.getElementById('canvasSizeIndicator').textContent = w + ' × ' + h;
+      updateExportSizeLabel();
+    }
+
+    function changeCanvasBg() {
+      const color = document.getElementById('canvasBgColor').value;
+      document.getElementById('canvasBgText').value = color;
+      canvas.backgroundColor = color;
+      canvas.renderAll();
+    }
+
+    function zoomIn() {
+      const zoom = canvas.getZoom();
+      canvas.setZoom(Math.min(zoom * 1.2, 5));
+      canvas.renderAll();
+    }
+
+    function zoomOut() {
+      const zoom = canvas.getZoom();
+      canvas.setZoom(Math.max(zoom / 1.2, 0.1));
+      canvas.renderAll();
+    }
+
+    function zoomFit() {
+      const wrap = document.getElementById('logoCanvasWrap');
+      const wrapW = wrap.clientWidth - 40;
+      const wrapH = wrap.clientHeight - 40;
+      const scaleX = wrapW / canvas.width;
+      const scaleY = wrapH / canvas.height;
+      canvas.setZoom(Math.min(scaleX, scaleY, 1));
+      canvas.renderAll();
+    }
+
+    function centerAll() {
+      const objs = canvas.getObjects();
+      if (objs.length === 0) return;
+      objs.forEach(obj => {
+        obj.set({
+          left: canvas.width / 2,
+          top: canvas.height / 2
+        });
+        obj.setCoords();
+      });
+      canvas.renderAll();
+      saveState();
+    }
+
+    // ========== 导出 ==========
+    function toggleExportOptions() {
+      const fmt = document.getElementById('exportFormat').value;
+      document.getElementById('exportScaleGroup').style.display = (fmt === 'svg') ? 'none' : 'block';
+      document.getElementById('exportQualityGroup').style.display = (fmt === 'jpg') ? 'block' : (fmt === 'png' ? 'none' : 'none');
+      document.getElementById('exportScale').onchange();
+    }
+
+    document.getElementById('exportScale').onchange = function() {
+      const custom = document.getElementById('exportScale').value === '0';
+      document.getElementById('exportCustomSize').style.display = custom ? 'block' : 'none';
+    };
+
+    function updateExportSizeLabel() {
+      // simplified
+    }
+
+    function exportLogo() {
+      const fmt = document.getElementById('exportFormat').value;
+
+      if (fmt === 'svg') {
+        // SVG export
+        const svg = canvas.toSVG();
+        downloadBlob(svg, 'logo.svg', 'image/svg+xml');
+        return;
+      }
+
+      // PNG / JPG export
+      let scale;
+      const scaleVal = document.getElementById('exportScale').value;
+      if (scaleVal === '0') {
+        const cw = parseInt(document.getElementById('exportCustomW').value) || canvas.width;
+        const ch = parseInt(document.getElementById('exportCustomH').value) || canvas.height;
+        scale = Math.min(cw / canvas.width, ch / canvas.height);
+      } else {
+        scale = parseFloat(scaleVal);
+      }
+
+      const quality = fmt === 'jpg' ? parseInt(document.getElementById('exportQuality').value) / 100 : 1;
+      const dataURL = canvas.toDataURL({
+        format: fmt === 'jpg' ? 'jpeg' : 'png',
+        quality: quality,
+        multiplier: scale
+      });
+
+      const ext = fmt === 'jpg' ? 'jpg' : 'png';
+      const mime = fmt === 'jpg' ? 'image/jpeg' : 'image/png';
+      downloadBlob(dataURL, 'logo.' + ext, mime);
+    }
+
+    function downloadBlob(data, filename, mime) {
+      if (data.startsWith('data:')) {
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = data;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        const blob = new Blob([data], {type: mime});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    // ========== 初始化 ==========
+    function init() {
+      updateLayers();
+      document.getElementById('canvasSizeIndicator').textContent = canvas.width + ' × ' + canvas.height;
+      zoomFit();
+    }
+
+    init();
+
+    // 响应窗口大小变化
+    window.addEventListener('resize', function() { zoomFit(); });
+
+    // 主题切换时更新画布背景色
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.attributeName === 'data-theme') {
+          canvas.renderAll();
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true });
+  </script>
+</body>
+</html>
