@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>房贷计算器2026 - 免费在线房贷月供计算</title>
+  <meta name="description" content="2026最新房贷计算器，支持等额本息、等额本金两种还款方式，商业贷款+公积金组合计算，免费在线使用。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="canonical" href="https://pwwdb.com/tools/mortgage-calculator.html">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"房贷计算器","url":"https://pwwdb.com/tools/mortgage-calculator.html","description":"免费在线房贷计算器，等额本息、等额本金、组合贷款计算","applicationCategory":"Finance","operatingSystem":"All"}</script>
+  <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?75219977aea1e8c43131cef657c7d713";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+  <style>
+    .calc-card { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:24px; margin-bottom:16px; }
+    .calc-card h2 { font-size:1.1rem; margin-bottom:16px; color:var(--text); }
+    .form-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; }
+    .form-row > div { flex:1; min-width:140px; }
+    .form-row label { display:block; font-size:0.82rem; color:var(--text-secondary); margin-bottom:4px; }
+    .form-row input, .form-row select { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-size:0.95rem; outline:none; transition:border-color var(--transition); font-family:inherit; }
+    .form-row input:focus, .form-row select:focus { border-color:var(--primary); }
+    .form-row .unit { font-size:0.82rem; color:var(--text-muted); margin-left:4px; }
+    .result-box { background:linear-gradient(135deg,#fef9f0,#fef3c7); border:2px solid #d4a855; border-radius:16px; padding:24px; text-align:center; margin:16px 0; }
+    .result-box .monthly { font-size:2.5rem; font-weight:900; color:#c0392b; line-height:1.2; }
+    .result-box .monthly small { font-size:0.9rem; font-weight:400; }
+    .result-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-top:16px; }
+    .result-stat { background:var(--bg); border-radius:10px; padding:14px; text-align:center; border:1px solid var(--border); }
+    .result-stat .val { font-size:1.3rem; font-weight:700; color:var(--text); }
+    .result-stat .lbl { font-size:0.75rem; color:var(--text-muted); margin-top:2px; }
+    .chart-bar { display:flex; height:24px; border-radius:12px; overflow:hidden; margin:12px 0; }
+    .chart-bar .principal { background:linear-gradient(90deg,#4f46e5,#6366f1); transition:width 0.5s; }
+    .chart-bar .interest { background:linear-gradient(90deg,#f59e0b,#fbbf24); transition:width 0.5s; }
+    .chart-legend { display:flex; gap:20px; justify-content:center; font-size:0.82rem; }
+    .chart-legend span { display:flex; align-items:center; gap:6px; }
+    .chart-legend .dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
+    .payment-table { width:100%; font-size:0.82rem; border-collapse:collapse; margin-top:12px; }
+    .payment-table th { background:var(--bg); padding:10px 8px; text-align:center; color:var(--text-secondary); font-weight:600; font-size:0.78rem; position:sticky; top:0; }
+    .payment-table td { padding:8px; text-align:center; border-bottom:1px solid var(--border); color:var(--text); }
+    .payment-table tr:hover td { background:var(--primary-light); }
+    .table-wrap { max-height:400px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; }
+    .tabs-sm { display:flex; gap:4px; background:var(--bg); padding:4px; border-radius:8px; margin-bottom:0; }
+    .tab-sm { flex:1; text-align:center; padding:8px; border:none; background:transparent; color:var(--text-secondary); cursor:pointer; border-radius:6px; font-size:0.85rem; font-family:inherit; transition:all var(--transition); }
+    .tab-sm.active { background:var(--bg-card); color:var(--primary); font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+    .highlight-num { color:var(--primary); font-weight:700; }
+    .early-repay { background:var(--bg); border-radius:12px; padding:16px; margin-top:16px; }
+    @media (max-width:768px) {
+      .form-row > div { min-width:100%; }
+      .result-box .monthly { font-size:1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar"><div class="navbar-inner"><a href="../index.html" class="navbar-logo"><span class="logo-icon">🔧</span><span>在线工具箱</span></a><div class="navbar-actions"><button class="theme-toggle" id="themeToggle">🌙</button></div></div></nav>
+
+  <div class="tool-page" style="max-width:960px;">
+    <div class="tool-header"><a href="../index.html" style="font-size:0.85rem;color:var(--text-muted);">← 返回首页</a><h1>🏠 房贷计算器 2026</h1><p>支持等额本息、等额本金、组合贷款，2026最新LPR利率，免费在线计算。</p></div>
+    <div class="ad-container">📢 广告位招租</div>
+
+    <div class="tool-body">
+      <!-- 贷款类型 -->
+      <div class="tabs-sm" style="margin-bottom:20px;">
+        <button class="tab-sm active" data-type="commercial">🏦 商业贷款</button>
+        <button class="tab-sm" data-type="fund">🏠 公积金贷款</button>
+        <button class="tab-sm" data-type="combo">🔀 组合贷款</button>
+      </div>
+
+      <!-- 输入区 -->
+      <div class="calc-card">
+        <div class="form-row">
+          <div>
+            <label>房屋总价（万元）</label>
+            <input type="number" id="housePrice" value="100" step="0.1" min="0">
+          </div>
+          <div>
+            <label>首付比例（%）</label>
+            <select id="downPaymentPct">
+              <option value="15">15%（首套最低）</option>
+              <option value="20">20%</option>
+              <option value="30" selected>30%</option>
+              <option value="40">40%</option>
+              <option value="50">50%</option>
+              <option value="0">自定义首付金额</option>
+            </select>
+          </div>
+          <div id="customDownGroup" style="display:none;">
+            <label>首付金额（万元）</label>
+            <input type="number" id="customDown" value="30" step="0.1" min="0">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:12px;">
+          <div>
+            <label>贷款年限</label>
+            <select id="loanYears">
+              <option value="5">5年</option>
+              <option value="10">10年</option>
+              <option value="15">15年</option>
+              <option value="20">20年</option>
+              <option value="25">25年</option>
+              <option value="30" selected>30年</option>
+            </select>
+          </div>
+          <div>
+            <label>年利率（%）</label>
+            <input type="number" id="rate" value="3.5" step="0.01" min="0">
+            <span style="font-size:0.75rem;color:var(--text-muted);">最新LPR: 3.6% → 首套 3.5%</span>
+          </div>
+          <div id="fundRateGroup" style="display:none;">
+            <label>公积金利率（%）</label>
+            <input type="number" id="fundRate" value="2.85" step="0.01" min="0">
+            <span style="font-size:0.75rem;color:var(--text-muted);">公积金: 3.25% → 首套 2.85%</span>
+          </div>
+          <div id="fundAmountGroup" style="display:none;">
+            <label>公积金贷款金额（万元）</label>
+            <input type="number" id="fundAmount" value="80" step="0.1" min="0">
+            <span style="font-size:0.75rem;color:var(--text-muted);">个人最高80万</span>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:12px;">
+          <div>
+            <label>还款方式</label>
+            <select id="repayMethod">
+              <option value="equal">等额本息（月供固定）</option>
+              <option value="principal">等额本金（逐月递减）</option>
+            </select>
+          </div>
+          <div>
+            <label>首次还款日期</label>
+            <input type="month" id="startDate">
+          </div>
+        </div>
+        <div class="btn-group" style="margin-top:12px;">
+          <button class="btn btn-primary" id="calcBtn">📊 开始计算</button>
+          <button class="btn btn-secondary" id="resetBtn">🔄 重置</button>
+        </div>
+      </div>
+
+      <!-- 结果区 -->
+      <div id="resultArea" style="display:none;">
+        <div class="result-box">
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:4px;">每月还款</div>
+          <div class="monthly" id="monthlyPayment">¥0<small>/月</small></div>
+          <div id="monthlyRange" style="font-size:0.85rem;color:var(--text-muted);margin-top:4px;"></div>
+        </div>
+
+        <div class="result-stats">
+          <div class="result-stat"><div class="val" id="totalLoan">0万</div><div class="lbl">贷款总额</div></div>
+          <div class="result-stat"><div class="val" id="totalInterest">0万</div><div class="lbl">利息总额</div></div>
+          <div class="result-stat"><div class="val" id="totalPayment">0万</div><div class="lbl">还款总额</div></div>
+          <div class="result-stat"><div class="val" id="firstPayment">0元</div><div class="lbl">首月还款</div></div>
+          <div class="result-stat"><div class="val" id="lastPayment">0元</div><div class="lbl">末月还款</div></div>
+          <div class="result-stat"><div class="val" id="interestRatio">0%</div><div class="lbl">利息占比</div></div>
+        </div>
+
+        <!-- 本金利息比例 -->
+        <div class="calc-card" style="margin-top:16px;">
+          <h2>📊 本金 vs 利息</h2>
+          <div class="chart-bar"><div class="principal" id="principalBar" style="width:65%;"></div><div class="interest" id="interestBar" style="width:35%;"></div></div>
+          <div class="chart-legend">
+            <span><span class="dot" style="background:#4f46e5;"></span>本金 <b id="principalAmt">0万</b></span>
+            <span><span class="dot" style="background:#f59e0b;"></span>利息 <b id="interestAmt">0万</b></span>
+          </div>
+        </div>
+
+        <!-- 提前还款计算 -->
+        <div class="calc-card">
+          <h2>💰 提前还款计算</h2>
+          <div class="form-row">
+            <div><label>提前还款时间</label><select id="earlyTime"><option value="12">第1年(12个月)</option><option value="24">第2年(24个月)</option><option value="36">第3年(36个月)</option><option value="60" selected>第5年(60个月)</option><option value="120">第10年(120个月)</option></select></div>
+            <div><label>提前还款金额（万元）</label><input type="number" id="earlyAmount" value="10" step="0.1" min="0"></div>
+          </div>
+          <button class="btn btn-secondary" id="earlyCalcBtn" style="margin-top:8px;">📐 计算省多少利息</button>
+          <div class="early-repay" id="earlyResult" style="display:none;"></div>
+        </div>
+
+        <!-- 还款明细表 -->
+        <div class="calc-card">
+          <h2>📋 还款明细表 <span style="font-size:0.8rem;color:var(--text-muted);" id="tableInfo"></span></h2>
+          <div class="table-wrap">
+            <table class="payment-table">
+              <thead><tr><th>期数</th><th>日期</th><th>月供</th><th>本金</th><th>利息</th><th>剩余本金</th></tr></thead>
+              <tbody id="paymentBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><p>© 2024 在线工具箱 · pwwdb.com · <span style="cursor:pointer;color:var(--primary);" onclick="alert('微信: Pwwdb-520\n邮箱: 455074219@qq.com\n\n网站开发 | 小程序 | AI工具 | 代写代码')">💬 联系我</span></p></div></footer>
+  <script src="../js/main.js"></script>
+  <script src="../js/tools/mortgage-calculator.js"></script>
+  <script>(function(){const s=localStorage.getItem('theme');if(s=='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+</body>
+</html>
